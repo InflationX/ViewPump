@@ -1,0 +1,69 @@
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="NewApi">
+
+    <!-- Base application theme. -->
+    <!--<style name="AppTheme" parent="android:Theme.Holo.Light.DarkActionBar">-->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="android:textViewStyle">@style/AppTheme.Widget.TextView</item>
+        <!-- Action Bar Theme -->
+        <item name="android:actionBarStyle">@style/AppTheme.ActionBar</item>
+        <!-- Custom Style Attribute-->
+        <item name="textFieldStyle">@style/TextField</item>
+    </style>
+
+    <!-- AppTheme ActionBar Style -->
+    <style name="AppTheme.ActionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
+        <item name="android:titleTextStyle">@style/AppTheme.ActionBar.TextAppearance</item>
+        <item name="android:subtitleTextStyle">@style/AppTheme.ActionBar.TextAppearance.SubTitle</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title.Inverse">
+        <item name="fontPath">fonts/Oswald-Stencbab.ttf</item>
+    </style>
+
+    <style name="AppTheme.ActionBar.TextAppearance.SubTitle" parent="TextAppearance.AppCompat.Widget.ActionBar.Subtitle.Inverse">
+        <item name="fontPath">fonts/gtw.ttf</item>
+    </style>
+
+
+    <style name="AppTheme.Widget"/>
+
+    <style name="TextViewNoStyleParent">
+        <item name="android:textColor">@android:color/holo_blue_dark</item>
+        <item name="fontPath">fonts/gtw.ttf</item>
+    </style>
+
+    <style name="AppTheme.Widget.TextView" parent="android:Widget.Holo.Light.TextView">
+        <!-- Custom Attr-->
+        <item name="fontPath">fonts/RobotoCondensed-Regular.ttf</item>
+    </style>
+
+    <style name="AppTheme.Widget.TextView.Style">
+        <item name="fontPath">fonts/RobotoCondensed-Regular.ttf</item>
+    </style>
+
+    <style name="AppTheme.Widget.TextViewAppearanceStyle" parent="android:Widget.Holo.Light.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.FontPath</item>
+    </style>
+
+    <style name="TextAppearance.FontPath" parent="android:TextAppearance">
+        <!-- Custom Attr-->
+        <item name="fontPath">fonts/RobotoCondensed-Regular.ttf</item>
+        <item name="android:textColor">#444</item>
+    </style>
+
+    <style name="TextAppearance.FontPathView" parent="android:TextAppearance">
+        <!-- Custom Attr-->
+        <item name="fontPath">fonts/Oswald-Stencbab.ttf</item>
+        <item name="android:textColor">#444</item>
+    </style>
+
+    <!-- Custom Class Styles -->
+    <style name="TextField" parent="android:Widget.Holo.Light.TextView">
+        <item name="fontPath">fonts/gtw.ttf</item>
+        <item name="android:textSize">@dimen/abc_text_size_small_material</item>
+    </style>
+
+</resources>

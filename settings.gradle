@@ -1,1 +1,1 @@
-include ':viewpump'
+include ':viewpump', ':ViewPumpSample'
