@@ -1,6 +1,5 @@
 package io.github.inflationx.viewpump;
 
-import android.os.Build;
 import android.support.annotation.MainThread;
 import android.view.View;
 
@@ -76,8 +75,8 @@ public final class ViewPump {
         /** List of interceptors. */
         private final List<Interceptor> interceptors = new ArrayList<>();
 
-        /** Use Reflection to inject the private factory. Doesn't exist pre HC. so defaults to false. */
-        private boolean reflection = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+        /** Use Reflection to inject the private factory. Defaults to true. */
+        private boolean reflection = true;
 
         /** Use Reflection to intercept CustomView inflation with the correct Context. */
         private boolean customViewCreation = true;
@@ -91,8 +90,7 @@ public final class ViewPump {
 
         /**
          * <p>Turn of the use of Reflection to inject the private factory.
-         * This has operational consequences! Please read and understand before disabling.
-         * <b>This is already disabled on pre Honeycomb devices. (API 11)</b></p>
+         * This has operational consequences! Please read and understand before disabling.</p>
          *
          * <p> If you disable this you will need to override your {@link android.app.Activity#onCreateView(View, String, android.content.Context, android.util.AttributeSet)}
          * as this is set as the {@link android.view.LayoutInflater} private factory.</p>
@@ -100,7 +98,6 @@ public final class ViewPump {
          * <b> Use the following code in the Activity if you disable FactoryInjection:</b>
          * <pre><code>
          * {@literal @}Override
-         * {@literal @}TargetApi(Build.VERSION_CODES.HONEYCOMB)
          * public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
          *   return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
          * }
@@ -119,7 +116,6 @@ public final class ViewPump {
          * overrideable injection flow.
          *
          * On HoneyComb+ this is inside the {@link android.app.Activity#onCreateView(View, String, android.content.Context, android.util.AttributeSet)}
-         * Pre HoneyComb this is in the {@link android.view.LayoutInflater.Factory#onCreateView(String, android.util.AttributeSet)}
          *
          * We wrap base implementations, so if you LayoutInflater/Factory/Activity creates the
          * custom view before we get to this point, your view is used. (Such is the case with the
