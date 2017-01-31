@@ -5,7 +5,7 @@ android {
     buildToolsVersion "24.0.0"
 
     defaultConfig {
-        minSdkVersion 7
+        minSdkVersion 14
         targetSdkVersion 24
         versionCode project.ext.versionCodeInt
         versionName version
@@ -21,7 +21,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:24.0.0'
+    provided 'com.android.support:appcompat-v7:24.0.0'
 
     testCompile 'org.assertj:assertj-core:1.7.1'
     testCompile 'junit:junit:4.12'

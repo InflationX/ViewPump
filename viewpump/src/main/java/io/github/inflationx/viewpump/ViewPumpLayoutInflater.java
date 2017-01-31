@@ -1,8 +1,6 @@
 package io.github.inflationx.viewpump;
 
-import android.annotation.TargetApi;
 import android.content.Context;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,11 +62,9 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
     private void setUpLayoutFactories(boolean cloned) {
         if (cloned) return;
         // If we are HC+ we get and set Factory2 otherwise we just wrap Factory1
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            if (getFactory2() != null && !(getFactory2() instanceof WrapperFactory2)) {
-                // Sets both Factory/Factory2
-                setFactory2(getFactory2());
-            }
+        if (getFactory2() != null && !(getFactory2() instanceof WrapperFactory2)) {
+            // Sets both Factory/Factory2
+            setFactory2(getFactory2());
         }
         // We can do this as setFactory2 is used for both methods.
         if (getFactory() != null && !(getFactory() instanceof WrapperFactory)) {
@@ -80,14 +76,13 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
     public void setFactory(Factory factory) {
         // Only set our factory and wrap calls to the Factory trying to be set!
         if (!(factory instanceof WrapperFactory)) {
-            super.setFactory(new WrapperFactory(factory, this));
+            super.setFactory(new WrapperFactory(factory));
         } else {
             super.setFactory(factory);
         }
     }
 
     @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void setFactory2(Factory2 factory2) {
         // Only set our factory and wrap calls to the Factory2 trying to be set!
         if (!(factory2 instanceof WrapperFactory2)) {
@@ -109,6 +104,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
             return;
         }
 
+        // TODO: we need to get this and wrap it if something has already set this
         final Method setPrivateFactoryMethod = ReflectionUtils.getMethod(LayoutInflater.class, "setPrivateFactory");
 
         if (setPrivateFactoryMethod != null) {
@@ -129,7 +125,6 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
      * We opted to manual injection over aggressive reflection, this should be less fragile.
      */
     @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public View onActivityCreateView(View parent, View view, String name, Context context, AttributeSet attrs) {
         return ViewPump.get().inflate(InflateRequest.builder()
                 .name(name)
@@ -145,7 +140,6 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
      * BUT only for none CustomViews.
      */
     @Override
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     protected View onCreateView(View parent, String name, AttributeSet attrs) throws ClassNotFoundException {
         return ViewPump.get().inflate(InflateRequest.builder()
                 .name(name)
@@ -165,7 +159,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
     protected View onCreateView(String name, AttributeSet attrs) throws ClassNotFoundException {
         return ViewPump.get().inflate(InflateRequest.builder()
                 .name(name)
-                .context(getContext()) // TODO: is this OK? before was fallbackView.getContext()
+                .context(getContext())
                 .attrs(attrs)
                 .fallbackViewCreator(nameAndAttrsViewCreator)
                 .build()).view();
@@ -217,7 +211,6 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         return view;
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private View superOnCreateView(View parent, String name, AttributeSet attrs) {
         try {
             return super.onCreateView(parent, name, attrs);
@@ -281,6 +274,9 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
             for (String prefix : sClassPrefixList) {
                 try {
                     view = inflater.createView(name, prefix, attrs);
+                    if (view != null) {
+                        break;
+                    }
                 } catch (ClassNotFoundException ignored) {
                 }
             }
@@ -292,7 +288,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
     }
 
     // ===
-    // Wrapper Factories for Pre/Post HC
+    // Wrapper Factories
     // ===
 
     /**
@@ -302,10 +298,8 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
 
         private final FallbackViewCreator mViewCreator;
 
-        public WrapperFactory(Factory factory, ViewPumpLayoutInflater inflater) {
-            mViewCreator = Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB
-                    ? new PreHcWrapperFactoryViewCreator(factory, inflater)
-                    : new WrapperFactoryViewCreator(factory);
+        public WrapperFactory(Factory factory) {
+            mViewCreator = new WrapperFactoryViewCreator(factory);
         }
 
         @Override
@@ -332,25 +326,9 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
     }
 
-    private static class PreHcWrapperFactoryViewCreator extends WrapperFactoryViewCreator implements FallbackViewCreator {
-        protected final ViewPumpLayoutInflater mInflater;
-
-        public PreHcWrapperFactoryViewCreator(Factory factory, ViewPumpLayoutInflater inflater) {
-            super(factory);
-            mInflater = inflater;
-        }
-
-        @Override
-        public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-            return mInflater.createCustomViewInternal(
-                    null, mFactory.onCreateView(name, context, attrs), name, context, attrs);
-        }
-    }
-
     /**
      * Factory 2 is the second port of call for LayoutInflation
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static class WrapperFactory2 implements Factory2 {
         protected final Factory2 mFactory2;
         private final WrapperFactory2ViewCreator mViewCreator;
@@ -377,7 +355,6 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static class WrapperFactory2ViewCreator implements FallbackViewCreator {
         protected final Factory2 mFactory2;
 
@@ -392,10 +369,8 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
     }
 
     /**
-     * Private factory is step three for Activity Inflation, this is what is attached to the
-     * Activity on HC+ devices.
+     * Private factory is step three for Activity Inflation, this is what is attached to the Activity
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static class PrivateWrapperFactory2 extends WrapperFactory2 {
 
         private final PrivateWrapperFactory2ViewCreator mViewCreator;
@@ -417,7 +392,6 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     private static class PrivateWrapperFactory2ViewCreator extends WrapperFactory2ViewCreator implements FallbackViewCreator {
         private final ViewPumpLayoutInflater mInflater;
 
