@@ -2,8 +2,6 @@ package io.github.inflationx.viewpump.sample;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -19,36 +17,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         final Toolbar toolbar = findById(this, R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        // Inject pragmatically
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.getInstance())
-                .commit();
-
-
-        final Handler handler = new Handler(Looper.getMainLooper());
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-//                toolbar.setTitle("ViewPump Added");
-                toolbar.setSubtitle("Added subtitle");
-            }
-        }, 1000);
-
-        handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                toolbar.setTitle(null);
-                toolbar.setSubtitle("Added subtitle");
-            }
-        }, 2000);
-
-        handler.postDelayed(new Runnable() {
-            @Override public void run() {
-                toolbar.setTitle("ViewPump added back");
-                toolbar.setSubtitle("Added subtitle");
-            }
-        }, 3000);
+        toolbar.setTitle(R.string.app_name);
     }
 
     /*
@@ -64,5 +33,4 @@ public class MainActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
-
 }

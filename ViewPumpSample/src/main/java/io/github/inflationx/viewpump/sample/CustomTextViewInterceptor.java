@@ -9,7 +9,11 @@ import io.github.inflationx.viewpump.InflateRequest;
 import io.github.inflationx.viewpump.InflateResult;
 import io.github.inflationx.viewpump.Interceptor;
 
-public class MyViewInterceptor implements Interceptor {
+/**
+ * This is an example of a pre-inflation interceptor that returns programmatically instantiated
+ * CustomTextViews instead of inflating TextViews.
+ */
+public class CustomTextViewInterceptor implements Interceptor {
 
     @Override
     public InflateResult intercept(Chain chain) {
@@ -31,7 +35,7 @@ public class MyViewInterceptor implements Interceptor {
     @Nullable
     private View inflateView(String name, Context context, AttributeSet attrs) {
         if ("TextView".equals(name)) {
-            return new MyTextView(context, attrs);
+            return new CustomTextView(context, attrs);
         }
         return null;
     }

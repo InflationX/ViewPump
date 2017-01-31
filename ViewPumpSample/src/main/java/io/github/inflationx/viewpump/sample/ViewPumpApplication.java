@@ -14,7 +14,7 @@ public class ViewPumpApplication extends Application {
         super.onCreate();
         ViewPump.init(ViewPump.builder()
                 .addInterceptor(new TextUpdatingInterceptor())
-                .addInterceptor(new MyViewInterceptor())
+                .addInterceptor(new CustomTextViewInterceptor())
                 .build());
     }
 }

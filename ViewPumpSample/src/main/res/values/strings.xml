@@ -1,26 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="app_name">ViewPump</string>
-    <string name="defined_gtw">\nThis is text set by the gtw style.\n</string>
-    <string name="default_theme">\nThis is text set by the default theme fontPath.\n</string>
-    <string name="defined_fontpath_view">\nThis has a font path set to Roboto Bold, on the View.\n</string>
-    <string name="defined_incorrect">\nThis has a fontPath set to a font file that does not exist, it goes back to the default.\n</string>
-    <string name="defined_in_style">\nThis has the font path defined in the style as Roboto Condensed.\n</string>
-    <string name="defined_in_appears_style">\nThis has the font path defined in the Styles TextAppearance as Roboto Condensed.\n</string>
-    <string name="defined_in_appears">\nThis has the font path defined in the Views TextAppearance as Oswald.\n</string>
-    <string name="defined_in_appears_caps">\nThis has the font path defined in the Views TextAppearance as Oswald. textAllCaps is applied.\n</string>
-    <string name="defined_custom_view">\nThis is a custom TextView with Oswald font.\n</string>
-    <string name="defined_view_stub">\nThis is a TextView inflated from a ViewStub.\n</string>
-    <string name="defined_view_stub_font_path">\nThis is a TextView inflated from a ViewStub w/ fontPath declared.\n</string>
-
-    <string name="checkbox_custom">Custom Oswald checkbox</string>
-
-    <string name="edit_text_hint">Custom Roboto Bold Hint</string>
-
-    <string name="custom_view_style_text">\nCustom View Style, taken from a Custom style attribute.\n</string>
-
-    <string name="button_default">Default Font (show dialog)</string>
-    <string name="button_defined">Bold Button (show toast)</string>
-
+    <string name="regular_textview">This is a regular TextView</string>
+    <string name="regular_button">This is a regular Button</string>
 </resources>
