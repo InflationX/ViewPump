@@ -4,6 +4,7 @@ import android.support.annotation.MainThread;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public final class ViewPump {
@@ -22,14 +23,11 @@ public final class ViewPump {
     /** Use Reflection to intercept CustomView inflation with the correct Context. */
     private final boolean mCustomViewCreation;
 
-    /** The single instance of the FallbackViewCreationInterceptor. */
-    private final FallbackViewCreationInterceptor mFallbackViewCreationInterceptor;
-
     private ViewPump(Builder builder) {
-        mInterceptorsWithFallback = new ArrayList<>();
-        mFallbackViewCreationInterceptor = new FallbackViewCreationInterceptor();
-
-        interceptors = builder.interceptors;
+        interceptors = immutableList(builder.interceptors);
+        List<Interceptor> interceptorsWithFallback = builder.interceptors;
+        interceptorsWithFallback.add(new FallbackViewCreationInterceptor());
+        mInterceptorsWithFallback = immutableList(interceptorsWithFallback);
         mReflection = builder.reflection;
         mCustomViewCreation = builder.customViewCreation;
     }
@@ -47,9 +45,6 @@ public final class ViewPump {
     }
 
     public InflateResult inflate(InflateRequest originalRequest) {
-        mInterceptorsWithFallback.clear();
-        mInterceptorsWithFallback.addAll(interceptors());
-        mInterceptorsWithFallback.add(mFallbackViewCreationInterceptor);
         Interceptor.Chain chain = new InterceptorChain(mInterceptorsWithFallback, 0, originalRequest);
         return chain.proceed(originalRequest);
     }
@@ -68,6 +63,11 @@ public final class ViewPump {
 
     public static Builder builder() {
         return new Builder();
+    }
+    
+    /** Returns an immutable copy of {@code list}. */
+    private static <T> List<T> immutableList(List<T> list) {
+        return Collections.unmodifiableList(new ArrayList<>(list));
     }
 
     public static final class Builder {
