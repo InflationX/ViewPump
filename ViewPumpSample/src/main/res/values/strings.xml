@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ViewPump</string>
-    <string name="regular_textview">This is a regular TextView</string>
+    <string name="custom_textview_prefixed_text">\n[CustomTextView] %s</string>
     <string name="regular_button">This is a regular Button</string>
+    <string name="regular_textview">This is a regular TextView</string>
 </resources>

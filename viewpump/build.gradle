@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 14
@@ -17,6 +17,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'consumer-proguard-rules.pro'
         }
+    }
+
+    lintOptions {
+        // we don't always want to use the latest version of the support library
+        disable 'GradleDependency'
+        textOutput 'stdout'
+        textReport System.getenv('CI') == 'true'
     }
 }
 
