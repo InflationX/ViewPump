@@ -50,7 +50,9 @@ public class ReflectionUtils {
         try {
             if (method == null) return;
             method.invoke(object, args);
-        } catch (IllegalAccessException | InvocationTargetException e) {
+        } catch (IllegalAccessException e) {
+            Log.d(TAG, "Can't access method using reflection", e);
+        } catch (InvocationTargetException e) {
             Log.d(TAG, "Can't invoke method using reflection", e);
         }
     }
