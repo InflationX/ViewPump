@@ -10,9 +10,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/primary_material_light"
+        android:background="#f5f5f5"
         android:minHeight="?attr/actionBarSize"
-        android:translationZ="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <LinearLayout

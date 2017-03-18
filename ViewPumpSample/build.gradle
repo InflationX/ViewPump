@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode project.ext.versionCodeInt
         versionName version
     }
@@ -23,18 +23,20 @@ android {
     }
 
     lintOptions {
-        disable 'AppCompatCustomView'
+        // we don't need to be indexed by firebase and we don't have a custom icon for our sample app
+        disable 'GoogleAppIndexingWarning', 'MissingApplicationIcon'
+        textOutput 'stdout'
+        textReport System.getenv('CI') == 'true'
     }
 }
 
 dependencies {
     compile project(':viewpump')
-    compile 'com.android.support:support-v4:25.0.1'
-    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:support-v4:25.3.0'
+    compile 'com.android.support:appcompat-v7:25.3.0'
 
     compile 'com.jakewharton:butterknife:8.2.1'
 
-//    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.3.1'
-    debugCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.3.1'
+    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }

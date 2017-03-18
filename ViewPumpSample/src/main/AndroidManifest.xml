@@ -5,7 +5,7 @@
 
     <application
         android:name="io.github.inflationx.viewpump.sample.ViewPumpApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
         <activity

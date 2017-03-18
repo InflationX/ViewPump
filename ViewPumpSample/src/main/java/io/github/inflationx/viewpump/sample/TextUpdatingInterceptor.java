@@ -25,7 +25,7 @@ public class TextUpdatingInterceptor implements Interceptor {
                     if (text.toString().startsWith("\n")) {
                         text = text.toString().substring(1);
                     }
-                    textView.setText("\n[CustomTextView] " + text);
+                    textView.setText(textView.getContext().getString(R.string.custom_textview_prefixed_text, text));
                 }
             } finally {
                 if (a != null) {
