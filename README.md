@@ -9,11 +9,11 @@ ViewPump installs a custom LayoutInflater via a ContextThemeWrapper and provides
 
 ### Dependency
 
-Include the dependency [Download (.aar)](http://search.maven.org/remotecontent?filepath=io/github/inflationx/viewpump/0.1.1-SNAPSHOT/viewpump-0.1.1-SNAPSHOT.aar) :
+Include the dependency [Download (.aar)](http://search.maven.org/remotecontent?filepath=io/github/inflationx/viewpump/1.0.0/viewpump-1.0.0.aar) :
 
 ```groovy
 dependencies {
-    compile 'io.github.inflationx:viewpump:0.1.1-SNAPSHOT'
+    compile 'io.github.inflationx:viewpump:1.0.0'
 }
 ```
 
