@@ -4,21 +4,23 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import io.github.inflationx.viewpump.FallbackViewCreator;
 import io.github.inflationx.viewpump.InflateRequest;
 import io.github.inflationx.viewpump.InflateResult;
 import io.github.inflationx.viewpump.Interceptor;
 import io.github.inflationx.viewpump.ViewPump;
 import io.github.inflationx.viewpump.util.AnotherTestView;
-import io.github.inflationx.viewpump.util.TestFallbackViewCreator;
-import io.github.inflationx.viewpump.util.NameChangingPreInflationInterceptor;
-import io.github.inflationx.viewpump.util.TestView;
 import io.github.inflationx.viewpump.util.AnotherTestViewNewingPreInflationInterceptor;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import io.github.inflationx.viewpump.util.NameChangingPreInflationInterceptor;
+import io.github.inflationx.viewpump.util.SingleConstructorTestView;
+import io.github.inflationx.viewpump.util.TestFallbackViewCreator;
+import io.github.inflationx.viewpump.util.TestPostInflationInterceptor;
+import io.github.inflationx.viewpump.util.TestView;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Matchers.any;
@@ -213,5 +215,58 @@ public class ViewPumpTest {
                 .isNotNull()
                 .isInstanceOf(AnotherTestView.class)
                 .isSameAs(fallbackView);
+    }
+
+    @Test
+    public void createView_fromClassName_shouldReturnView() {
+        View view = ViewPump.create(mockContext, TestView.class);
+
+        assertThat(view)
+                .isNotNull()
+                .isInstanceOf(TestView.class);
+
+        assertThat(((TestView) view).isSameContextAs(mockContext)).isTrue();
+    }
+
+    @Test
+    public void createView_fromClassNameWithSingleParamConstructor_shouldReturnView() {
+        View view = ViewPump.create(mockContext, SingleConstructorTestView.class);
+
+        assertThat(view)
+                .isNotNull()
+                .isInstanceOf(SingleConstructorTestView.class);
+
+        assertThat(((SingleConstructorTestView) view).isSameContextAs(mockContext)).isTrue();
+    }
+
+    @Test
+    public void createView_withPreInflationInterceptor_shouldReturnViewWithNewName() {
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new NameChangingPreInflationInterceptor())
+                .build());
+
+        View view = ViewPump.create(mockContext, TestView.class);
+
+        assertThat(view)
+                .isNotNull()
+                .isInstanceOf(AnotherTestView.class);
+
+        assertThat(((AnotherTestView) view).isSameContextAs(mockContext)).isTrue();
+    }
+
+    @Test
+    public void createView_withPostInflationInterceptor_shouldReturnPostProcessedView() {
+        ViewPump.init(ViewPump.builder()
+                .addInterceptor(new TestPostInflationInterceptor())
+                .build());
+
+        View view = ViewPump.create(mockContext, TestView.class);
+
+        assertThat(view)
+                .isNotNull()
+                .isInstanceOf(TestView.class);
+
+        assertThat(((TestView) view).isSameContextAs(mockContext)).isTrue();
+        assertThat(((TestView) view).isPostProcessed()).isTrue();
     }
 }

@@ -1,6 +1,8 @@
 package io.github.inflationx.viewpump;
 
+import android.content.Context;
 import android.support.annotation.MainThread;
+import android.support.annotation.Nullable;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -23,6 +25,9 @@ public final class ViewPump {
     /** Use Reflection to intercept CustomView inflation with the correct Context. */
     private final boolean mCustomViewCreation;
 
+    /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API. */
+    private static ReflectiveFallbackViewCreator mReflectiveFallbackViewCreator;
+
     private ViewPump(Builder builder) {
         interceptors = immutableList(builder.interceptors);
         List<Interceptor> interceptorsWithFallback = builder.interceptors;
@@ -30,6 +35,7 @@ public final class ViewPump {
         mInterceptorsWithFallback = immutableList(interceptorsWithFallback);
         mReflection = builder.reflection;
         mCustomViewCreation = builder.customViewCreation;
+        mReflectiveFallbackViewCreator = new ReflectiveFallbackViewCreator();
     }
 
     public static void init(ViewPump viewPump) {
@@ -42,6 +48,24 @@ public final class ViewPump {
             INSTANCE = builder().build();
         }
         return INSTANCE;
+    }
+
+    /**
+     * Allows for programmatic creation of Views via reflection on class name that are still
+     * pre/post-processed by the inflation interceptors.
+     *
+     * @param context The context.
+     * @param clazz The class of View to be created.
+     * @return The processed view, which might not necessarily be the same type as clazz.
+     */
+    @Nullable
+    public static View create(Context context, Class<? extends View> clazz) {
+        return get().inflate(InflateRequest.builder()
+                .context(context)
+                .name(clazz.getName())
+                .fallbackViewCreator(getReflectiveFallbackViewCreator())
+                .build())
+                .view();
     }
 
     public InflateResult inflate(InflateRequest originalRequest) {
@@ -68,6 +92,13 @@ public final class ViewPump {
     /** Returns an immutable copy of {@code list}. */
     private static <T> List<T> immutableList(List<T> list) {
         return Collections.unmodifiableList(new ArrayList<>(list));
+    }
+
+    private static ReflectiveFallbackViewCreator getReflectiveFallbackViewCreator() {
+        if (mReflectiveFallbackViewCreator == null) {
+            mReflectiveFallbackViewCreator = new ReflectiveFallbackViewCreator();
+        }
+        return mReflectiveFallbackViewCreator;
     }
 
     public static final class Builder {
