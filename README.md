@@ -91,6 +91,8 @@ protected void attachBaseContext(Context newBase) {
 
 _You're good to go!_
 
+To see more ideas for potential use cases, check out the [Recipes](https://github.com/InflationX/ViewPump/wiki/Recipes) wiki page.
+
 # Collaborators
 
 - [@jbarr21](https://github.com/jbarr21)
