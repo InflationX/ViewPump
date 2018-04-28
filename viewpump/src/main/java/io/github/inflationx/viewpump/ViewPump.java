@@ -26,7 +26,7 @@ public final class ViewPump {
     private final boolean mCustomViewCreation;
 
     /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API. */
-    private static ReflectiveFallbackViewCreator mReflectiveFallbackViewCreator;
+    private static FallbackViewCreator mReflectiveFallbackViewCreator;
 
     private ViewPump(Builder builder) {
         interceptors = immutableList(builder.interceptors);
@@ -35,7 +35,7 @@ public final class ViewPump {
         mInterceptorsWithFallback = immutableList(interceptorsWithFallback);
         mReflection = builder.reflection;
         mCustomViewCreation = builder.customViewCreation;
-        mReflectiveFallbackViewCreator = new ReflectiveFallbackViewCreator();
+        mReflectiveFallbackViewCreator = builder.reflectiveFallbackViewCreator;
     }
 
     public static void init(ViewPump viewPump) {
@@ -94,7 +94,7 @@ public final class ViewPump {
         return Collections.unmodifiableList(new ArrayList<>(list));
     }
 
-    private static ReflectiveFallbackViewCreator getReflectiveFallbackViewCreator() {
+    private static FallbackViewCreator getReflectiveFallbackViewCreator() {
         if (mReflectiveFallbackViewCreator == null) {
             mReflectiveFallbackViewCreator = new ReflectiveFallbackViewCreator();
         }
@@ -111,6 +111,9 @@ public final class ViewPump {
 
         /** Use Reflection to intercept CustomView inflation with the correct Context. */
         private boolean customViewCreation = true;
+
+        /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API. */
+        private FallbackViewCreator reflectiveFallbackViewCreator = null;
 
         private Builder() { }
 
@@ -167,6 +170,11 @@ public final class ViewPump {
          */
         public Builder setCustomViewInflationEnabled(boolean enabled) {
             this.customViewCreation = enabled;
+            return this;
+        }
+
+        public Builder setReflectiveFallbackViewCreator(FallbackViewCreator reflectiveFallbackViewCreator) {
+            this.reflectiveFallbackViewCreator = reflectiveFallbackViewCreator;
             return this;
         }
 
