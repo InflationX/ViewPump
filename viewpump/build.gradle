@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 27
+    buildToolsVersion "27.0.3"
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode project.ext.versionCodeInt
         versionName version
         consumerProguardFiles 'consumer-proguard-rules.pro'
@@ -28,11 +28,13 @@ android {
 }
 
 dependencies {
-    provided 'com.android.support:appcompat-v7:25.0.1'
+    compileOnly 'com.android.support:appcompat-v7:27.1.1'
+    compileOnly 'com.android.support:support-annotations:27.1.1'
 
-    testCompile 'org.assertj:assertj-core:1.7.1'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.0.42-beta'
+    testImplementation 'com.android.support:support-annotations:27.1.1'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.assertj:assertj-core:2.6.0'
+    testImplementation 'org.mockito:mockito-core:2.15.0'
 }
 
 apply from: rootProject.file('gradle/deploy.gradle')

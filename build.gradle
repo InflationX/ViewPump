@@ -2,15 +2,17 @@
 buildscript {
   repositories {
     jcenter()
+    google()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.3.0'
+    classpath 'com.android.tools.build:gradle:3.1.0'
   }
 }
 
 allprojects {
   repositories {
     jcenter()
+    google()
     mavenLocal()
   }
   // Is Release Build?
@@ -19,9 +21,4 @@ allprojects {
     isReleaseVersion = has("release")
     versionCodeInt = getProperty('VERSION_CODE').toInteger()
   }
-}
-
-task wrapper(type: Wrapper) {
-  gradleVersion = '3.3'
-  distributionUrl = "https://services.gradle.org/distributions/gradle-$gradleVersion-all.zip"
 }
