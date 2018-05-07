@@ -1,6 +1,7 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,8 +26,11 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
     private boolean mSetPrivateFactory = false;
     private Field mConstructorArgs = null;
 
+    private boolean mStoreLayoutResId = false;
+
     protected ViewPumpLayoutInflater(Context context) {
         super(context);
+        mStoreLayoutResId = ViewPump.get().isStoreLayoutResId();
         nameAndAttrsViewCreator = new NameAndAttrsViewCreator(this);
         parentAndNameAndAttrsViewCreator = new ParentAndNameAndAttrsViewCreator(this);
         setUpLayoutFactories(false);
@@ -34,6 +38,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
 
     protected ViewPumpLayoutInflater(LayoutInflater original, Context newContext, final boolean cloned) {
         super(original, newContext);
+        mStoreLayoutResId = ViewPump.get().isStoreLayoutResId();
         nameAndAttrsViewCreator = new NameAndAttrsViewCreator(this);
         parentAndNameAndAttrsViewCreator = new ParentAndNameAndAttrsViewCreator(this);
         setUpLayoutFactories(cloned);
@@ -48,6 +53,15 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
     // Wrapping goodies
     // ===
 
+
+    @Override
+    public View inflate(int resource, @Nullable ViewGroup root, boolean attachToRoot) {
+        View view = super.inflate(resource, root, attachToRoot);
+        if (view != null && mStoreLayoutResId) {
+            view.setTag(R.id.viewpump_layout_res, resource);
+        }
+        return view;
+    }
 
     @Override
     public View inflate(XmlPullParser parser, ViewGroup root, boolean attachToRoot) {
