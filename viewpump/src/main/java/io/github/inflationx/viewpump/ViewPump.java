@@ -25,6 +25,9 @@ public final class ViewPump {
     /** Use Reflection to intercept CustomView inflation with the correct Context. */
     private final boolean mCustomViewCreation;
 
+    /** Store the resourceId for the layout used to inflate the View in the View tag. */
+    private final boolean mStoreLayoutResId;
+
     /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API. */
     private static FallbackViewCreator mReflectiveFallbackViewCreator;
 
@@ -35,6 +38,7 @@ public final class ViewPump {
         mInterceptorsWithFallback = immutableList(interceptorsWithFallback);
         mReflection = builder.reflection;
         mCustomViewCreation = builder.customViewCreation;
+        mStoreLayoutResId = builder.storeLayoutResId;
         mReflectiveFallbackViewCreator = builder.reflectiveFallbackViewCreator;
     }
 
@@ -85,6 +89,10 @@ public final class ViewPump {
         return mCustomViewCreation;
     }
 
+    public boolean isStoreLayoutResId() {
+        return mStoreLayoutResId;
+    }
+
     public static Builder builder() {
         return new Builder();
     }
@@ -111,6 +119,9 @@ public final class ViewPump {
 
         /** Use Reflection to intercept CustomView inflation with the correct Context. */
         private boolean customViewCreation = true;
+
+        /** Store the resourceId for the layout used to inflate the View in the View tag. */
+        private boolean storeLayoutResId = false;
 
         /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API. */
         private FallbackViewCreator reflectiveFallbackViewCreator = null;
@@ -175,6 +186,17 @@ public final class ViewPump {
 
         public Builder setReflectiveFallbackViewCreator(FallbackViewCreator reflectiveFallbackViewCreator) {
             this.reflectiveFallbackViewCreator = reflectiveFallbackViewCreator;
+            return this;
+        }
+
+        /**
+         * The LayoutInflater can store the layout resourceId used to inflate a view into the inflated view's tag
+         * where it can be later retrieved by an interceptor.
+         *
+         * @param enabled True if the view should store the resId; otherwise, false.
+         */
+        public Builder setStoreLayoutResId(boolean enabled) {
+            this.storeLayoutResId = enabled;
             return this;
         }
 
