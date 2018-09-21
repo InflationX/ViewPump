@@ -1,10 +1,11 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public class InflateResult {
     private final View view;
@@ -66,7 +67,8 @@ public class InflateResult {
         private Context context;
         private AttributeSet attrs;
 
-        private Builder() { }
+        private Builder() {
+        }
 
         private Builder(InflateResult result) {
             this.view = result.view;

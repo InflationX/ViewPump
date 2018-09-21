@@ -23,9 +23,7 @@ import io.github.inflationx.viewpump.util.TestPostInflationInterceptor;
 import io.github.inflationx.viewpump.util.TestView;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.nullable;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -34,9 +32,12 @@ import static org.mockito.Mockito.when;
 
 public class ViewPumpTest {
 
-    @Mock Context mockContext;
-    @Mock AttributeSet mockAttrs;
-    @Mock View mockParentView;
+    @Mock
+    Context mockContext;
+    @Mock
+    AttributeSet mockAttrs;
+    @Mock
+    View mockParentView;
 
     @Before
     public void setup() {
@@ -196,10 +197,10 @@ public class ViewPumpTest {
         View fallbackView = new AnotherTestView(mockContext);
         FallbackViewCreator mockFallbackViewCreator = mock(FallbackViewCreator.class);
         when(mockFallbackViewCreator.onCreateView(
-                    nullable(View.class),
-                    eq(AnotherTestView.NAME),
-                    eq(mockContext),
-                    nullable(AttributeSet.class)))
+                nullable(View.class),
+                eq(AnotherTestView.NAME),
+                eq(mockContext),
+                nullable(AttributeSet.class)))
                 .thenReturn(fallbackView);
 
         InflateResult result = ViewPump.get().inflate(InflateRequest.builder()

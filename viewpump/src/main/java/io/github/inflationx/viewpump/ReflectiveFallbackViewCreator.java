@@ -1,22 +1,23 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 class ReflectiveFallbackViewCreator implements FallbackViewCreator {
 
-    private static final Class<?>[] constructorSignature2 = new Class[] {
+    private static final Class<?>[] constructorSignature2 = new Class[]{
             Context.class,
             AttributeSet.class
     };
 
-    private static final Class<?>[] constructorSignature1 = new Class[] {
+    private static final Class<?>[] constructorSignature1 = new Class[]{
             Context.class
     };
 

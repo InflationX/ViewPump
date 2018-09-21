@@ -1,34 +1,47 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
-import android.support.annotation.MainThread;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import androidx.annotation.MainThread;
+import androidx.annotation.Nullable;
+
 public final class ViewPump {
 
     private static ViewPump INSTANCE;
 
-    /** List of interceptors. */
+    /**
+     * List of interceptors.
+     */
     private final List<Interceptor> interceptors;
 
-    /** List that gets cleared and reused as it holds interceptors with the fallback added. */
+    /**
+     * List that gets cleared and reused as it holds interceptors with the fallback added.
+     */
     private final List<Interceptor> mInterceptorsWithFallback;
 
-    /** Use Reflection to inject the private factory. */
+    /**
+     * Use Reflection to inject the private factory.
+     */
     private final boolean mReflection;
 
-    /** Use Reflection to intercept CustomView inflation with the correct Context. */
+    /**
+     * Use Reflection to intercept CustomView inflation with the correct Context.
+     */
     private final boolean mCustomViewCreation;
 
-    /** Store the resourceId for the layout used to inflate the View in the View tag. */
+    /**
+     * Store the resourceId for the layout used to inflate the View in the View tag.
+     */
     private final boolean mStoreLayoutResId;
 
-    /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API. */
+    /**
+     * A FallbackViewCreator used to instantiate a view via reflection when using the create() API.
+     */
     private static FallbackViewCreator mReflectiveFallbackViewCreator;
 
     private ViewPump(Builder builder) {
@@ -59,7 +72,7 @@ public final class ViewPump {
      * pre/post-processed by the inflation interceptors.
      *
      * @param context The context.
-     * @param clazz The class of View to be created.
+     * @param clazz   The class of View to be created.
      * @return The processed view, which might not necessarily be the same type as clazz.
      */
     @Nullable
@@ -96,8 +109,10 @@ public final class ViewPump {
     public static Builder builder() {
         return new Builder();
     }
-    
-    /** Returns an immutable copy of {@code list}. */
+
+    /**
+     * Returns an immutable copy of {@code list}.
+     */
     private static <T> List<T> immutableList(List<T> list) {
         return Collections.unmodifiableList(new ArrayList<>(list));
     }
@@ -111,22 +126,33 @@ public final class ViewPump {
 
     public static final class Builder {
 
-        /** List of interceptors. */
+        /**
+         * List of interceptors.
+         */
         private final List<Interceptor> interceptors = new ArrayList<>();
 
-        /** Use Reflection to inject the private factory. Defaults to true. */
+        /**
+         * Use Reflection to inject the private factory. Defaults to true.
+         */
         private boolean reflection = true;
 
-        /** Use Reflection to intercept CustomView inflation with the correct Context. */
+        /**
+         * Use Reflection to intercept CustomView inflation with the correct Context.
+         */
         private boolean customViewCreation = true;
 
-        /** Store the resourceId for the layout used to inflate the View in the View tag. */
+        /**
+         * Store the resourceId for the layout used to inflate the View in the View tag.
+         */
         private boolean storeLayoutResId = false;
 
-        /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API. */
+        /**
+         * A FallbackViewCreator used to instantiate a view via reflection when using the create() API.
+         */
         private FallbackViewCreator reflectiveFallbackViewCreator = null;
 
-        private Builder() { }
+        private Builder() {
+        }
 
         public Builder addInterceptor(Interceptor interceptor) {
             interceptors.add(interceptor);
@@ -159,20 +185,20 @@ public final class ViewPump {
          * Due to the poor inflation order where custom views are created and never returned inside an
          * {@code onCreateView(...)} method. We have to create CustomView's at the latest point in the
          * overrideable injection flow.
-         *
+         * <p>
          * On HoneyComb+ this is inside the {@link android.app.Activity#onCreateView(View, String, android.content.Context, android.util.AttributeSet)}
-         *
+         * <p>
          * We wrap base implementations, so if you LayoutInflater/Factory/Activity creates the
          * custom view before we get to this point, your view is used. (Such is the case with the
          * TintEditText etc)
-         *
+         * <p>
          * The problem is, the native methods pass there parents context to the constructor in a really
          * specific place. We have to mimic this in {@link ViewPumpLayoutInflater#createCustomViewInternal(View, View, String, android.content.Context, android.util.AttributeSet)}
          * To mimic this we have to use reflection as the Class constructor args are hidden to us.
-         *
+         * <p>
          * We have discussed other means of doing this but this is the only semi-clean way of doing it.
          * (Without having to do proxy classes etc).
-         *
+         * <p>
          * Calling this will of course speed up inflation by turning off reflection, but not by much,
          * But if you want ViewPump to inject the correct typeface then you will need to make sure your CustomView's
          * are created before reaching the LayoutInflater onViewCreated.

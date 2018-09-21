@@ -3,11 +3,12 @@ package io.github.inflationx.viewpump;
 import android.app.Activity;
 import android.content.Context;
 import android.content.ContextWrapper;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 public final class ViewPumpContextWrapper extends ContextWrapper {
 
@@ -15,7 +16,7 @@ public final class ViewPumpContextWrapper extends ContextWrapper {
 
     /**
      * Uses the default configuration from {@link ViewPump}
-     *
+     * <p>
      * Remember if you are defining default in the {@link ViewPump} make sure this
      * is initialised before the activity is created.
      *
@@ -32,7 +33,7 @@ public final class ViewPumpContextWrapper extends ContextWrapper {
      * This will need to be called from the
      * {@link Activity#onCreateView(View, String, Context, AttributeSet)}
      * method to enable view font injection if the view is created inside the activity onCreateView.
-     *
+     * <p>
      * You would implement this method like so in you base activity.
      * <pre>
      * {@code
@@ -70,7 +71,7 @@ public final class ViewPumpContextWrapper extends ContextWrapper {
 
     /**
      * Uses the default configuration from {@link ViewPump}
-     *
+     * <p>
      * Remember if you are defining default in the
      * {@link ViewPump} make sure this is initialised before
      * the activity is created.

@@ -1,15 +1,16 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
+
+import androidx.annotation.Nullable;
 
 interface ViewPumpActivityFactory {
 
     /**
      * Used to Wrap the Activity onCreateView method.
-     *
+     * <p>
      * You implement this method like so in you base activity.
      * <pre>
      * {@code

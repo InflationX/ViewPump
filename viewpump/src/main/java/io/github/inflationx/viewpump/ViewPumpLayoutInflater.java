@@ -1,7 +1,6 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,9 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityFactory {
 
@@ -255,7 +257,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
 
         @Override
-        public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        public View onCreateView(View parent, @NonNull String name, @NonNull Context context, AttributeSet attrs) {
             return inflater.createCustomViewInternal(parent, view, name, context, attrs);
         }
     }
@@ -268,7 +270,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
 
         @Override
-        public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        public View onCreateView(View parent, @NonNull String name, @NonNull Context context, AttributeSet attrs) {
             return inflater.superOnCreateView(parent, name, attrs);
         }
     }
@@ -281,7 +283,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
 
         @Override
-        public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        public View onCreateView(View parent, @NonNull String name, @NonNull Context context, AttributeSet attrs) {
             // This mimics the {@code PhoneLayoutInflater} in the way it tries to inflate the base
             // classes, if this fails its pretty certain the app will fail at this point.
             View view = null;
@@ -335,7 +337,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
 
         @Override
-        public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        public View onCreateView(View parent, @NonNull String name, @NonNull Context context, AttributeSet attrs) {
             return mFactory.onCreateView(name, context, attrs);
         }
     }
@@ -377,7 +379,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
 
         @Override
-        public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        public View onCreateView(View parent, @NonNull String name, @NonNull Context context, AttributeSet attrs) {
             return mFactory2.onCreateView(parent, name, context, attrs);
         }
     }
@@ -415,7 +417,7 @@ class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityF
         }
 
         @Override
-        public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+        public View onCreateView(View parent, @NonNull String name, @NonNull Context context, AttributeSet attrs) {
             return mInflater.createCustomViewInternal(parent,
                     mFactory2.onCreateView(parent, name, context, attrs), name, context, attrs);
         }
