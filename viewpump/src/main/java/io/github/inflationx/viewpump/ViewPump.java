@@ -1,13 +1,14 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
-import android.support.annotation.MainThread;
-import android.support.annotation.Nullable;
 import android.view.View;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.Nullable;
 
 public final class ViewPump {
 

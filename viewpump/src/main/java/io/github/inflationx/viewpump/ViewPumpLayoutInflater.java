@@ -1,7 +1,6 @@
 package io.github.inflationx.viewpump;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +10,9 @@ import org.xmlpull.v1.XmlPullParser;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 class ViewPumpLayoutInflater extends LayoutInflater implements ViewPumpActivityFactory {
 

@@ -1,10 +1,10 @@
 package io.github.inflationx.viewpump.sample;
 
 import android.content.Context;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 
+import androidx.annotation.Nullable;
 import io.github.inflationx.viewpump.InflateRequest;
 import io.github.inflationx.viewpump.InflateResult;
 import io.github.inflationx.viewpump.Interceptor;
