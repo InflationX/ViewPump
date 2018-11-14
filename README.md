@@ -1,4 +1,4 @@
-ViewPump  [![API](https://img.shields.io/badge/API-15%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14) [![Gradle Version](https://img.shields.io/badge/gradle-4.10.2-green.svg)](https://docs.gradle.org/current/release-notes) [![androidx](https://img.shields.io/badge/androidx-1.0.0--rc02-brightgreen.svg)](https://developer.android.com/topic/libraries/support-library/refactor)
+ViewPump
 ========
 
 View inflation you can intercept.
