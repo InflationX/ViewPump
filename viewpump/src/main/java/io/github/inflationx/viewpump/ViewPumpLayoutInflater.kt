@@ -176,7 +176,6 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
    * will fall back through to the PhoneLayoutInflater method of inflating custom views where
    * ViewPump will NOT have a hook into.
    *
-   * @param parent      parent view
    * @param view        view if it has been inflated by this point, if this is not null this method
    * just returns this value.
    * @param name        name of the thing to inflate.
@@ -184,7 +183,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
    * @param attrs       Attr for this view which we can steal fontPath from too.
    * @return view or the View we inflate in here.
    */
-  private fun createCustomViewInternal(parent: View?, view: View?, name: String,
+  private fun createCustomViewInternal(view: View?, name: String,
       viewContext: Context, attrs: AttributeSet?): View? {
     var mutableView = view
     // I by no means advise anyone to do this normally, but Google have locked down access to
@@ -243,7 +242,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
 
     override fun onCreateView(parent: View?, name: String, context: Context,
         attrs: AttributeSet?): View? {
-      return inflater.createCustomViewInternal(parent, view, name, context, attrs)
+      return inflater.createCustomViewInternal(view, name, context, attrs)
     }
   }
 
@@ -378,7 +377,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
 
     override fun onCreateView(parent: View?, name: String, context: Context,
         attrs: AttributeSet?): View? {
-      return mInflater.createCustomViewInternal(parent,
+      return mInflater.createCustomViewInternal(
           mFactory2.onCreateView(parent, name, context, attrs), name, context, attrs)
     }
   }
