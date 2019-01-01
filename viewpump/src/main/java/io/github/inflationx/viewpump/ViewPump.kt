@@ -23,10 +23,10 @@ class ViewPump private constructor(
 ) {
 
   /** List that gets cleared and reused as it holds interceptors with the fallback added.  */
-  private val mInterceptorsWithFallback: List<Interceptor> = (interceptors + FallbackViewCreationInterceptor()).toMutableList()
+  private val interceptorsWithFallback: List<Interceptor> = (interceptors + FallbackViewCreationInterceptor()).toMutableList()
 
   fun inflate(originalRequest: InflateRequest): InflateResult {
-    val chain = InterceptorChain(mInterceptorsWithFallback, 0, originalRequest)
+    val chain = InterceptorChain(interceptorsWithFallback, 0, originalRequest)
     return chain.proceed(originalRequest)
   }
 
@@ -132,7 +132,9 @@ class ViewPump private constructor(
     private var INSTANCE: ViewPump? = null
 
     /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API.  */
-    private var mReflectiveFallbackViewCreator: FallbackViewCreator? = null
+    private val reflectiveFallbackViewCreator: FallbackViewCreator by lazy {
+      ReflectiveFallbackViewCreator()
+    }
 
     @JvmStatic
     fun init(viewPump: ViewPump?) {
@@ -168,11 +170,5 @@ class ViewPump private constructor(
     fun builder(): Builder {
       return Builder()
     }
-
-    private val reflectiveFallbackViewCreator: FallbackViewCreator
-      get() {
-        return mReflectiveFallbackViewCreator
-            ?: ReflectiveFallbackViewCreator().also { mReflectiveFallbackViewCreator = it }
-      }
   }
 }

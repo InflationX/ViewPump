@@ -18,14 +18,14 @@ import android.view.View
  */
 class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper(base) {
 
-  private var mInflater: ViewPumpLayoutInflater? = null
+  private var inflater: ViewPumpLayoutInflater? = null
 
   override fun getSystemService(name: String): Any? {
     if (Context.LAYOUT_INFLATER_SERVICE == name) {
-      if (mInflater == null) {
-        mInflater = ViewPumpLayoutInflater(LayoutInflater.from(baseContext), this, false)
+      if (inflater == null) {
+        inflater = ViewPumpLayoutInflater(LayoutInflater.from(baseContext), this, false)
       }
-      return mInflater
+      return inflater
     }
     return super.getSystemService(name)
   }
