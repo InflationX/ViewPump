@@ -135,7 +135,7 @@ class ViewPump private constructor(
     private var mReflectiveFallbackViewCreator: FallbackViewCreator? = null
 
     @JvmStatic
-    fun init(viewPump: ViewPump) {
+    fun init(viewPump: ViewPump?) {
       INSTANCE = viewPump
     }
 
