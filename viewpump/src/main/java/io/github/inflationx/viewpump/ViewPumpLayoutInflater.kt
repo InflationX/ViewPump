@@ -5,9 +5,8 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-
+import io.github.inflationx.viewpump.ReflectionUtils.Companion.setValueQuietly
 import org.xmlpull.v1.XmlPullParser
-
 import java.lang.reflect.Field
 
 internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory {
@@ -197,19 +196,20 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
     // If CustomViewCreation is off skip this.
     if (!ViewPump.get().isCustomViewCreation) return mutableView
     if (mutableView == null && name.indexOf('.') > -1) {
-      val mConstructorArgsArr = ReflectionUtils.getValue(CONSTRUCTOR_ARGS_FIELD, this) as Array<Any>
+      @Suppress("UNCHECKED_CAST")
+      val mConstructorArgsArr = CONSTRUCTOR_ARGS_FIELD.get(this) as Array<Any>
       val lastContext = mConstructorArgsArr[0]
       // The LayoutInflater actually finds out the correct context to use. We just need to set
       // it on the mConstructor for the internal method.
       // Set the constructor ars up for the createView, not sure why we can't pass these in.
       mConstructorArgsArr[0] = viewContext
-      ReflectionUtils.setValue(CONSTRUCTOR_ARGS_FIELD, this, mConstructorArgsArr)
+      CONSTRUCTOR_ARGS_FIELD.setValueQuietly(this, mConstructorArgsArr)
       try {
         mutableView = createView(name, null, attrs)
       } catch (ignored: ClassNotFoundException) {
       } finally {
         mConstructorArgsArr[0] = lastContext
-        ReflectionUtils.setValue(CONSTRUCTOR_ARGS_FIELD, this, mConstructorArgsArr)
+        CONSTRUCTOR_ARGS_FIELD.setValueQuietly(this, mConstructorArgsArr)
       }
     }
     return mutableView
@@ -386,10 +386,9 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
 
     private val sClassPrefixList = arrayOf("android.widget.", "android.webkit.")
     private val CONSTRUCTOR_ARGS_FIELD: Field by lazy {
-      requireNotNull(
-          ReflectionUtils.getField(LayoutInflater::class.java, "CONSTRUCTOR_ARGS_FIELD")) {
+      requireNotNull(LayoutInflater::class.java.getDeclaredField("CONSTRUCTOR_ARGS_FIELD")) {
         "No constructor arguments field found in LayoutInflater!"
-      }
+      }.apply { isAccessible = true }
     }
   }
 

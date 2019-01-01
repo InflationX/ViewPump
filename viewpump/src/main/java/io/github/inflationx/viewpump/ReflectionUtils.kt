@@ -14,32 +14,11 @@ open class ReflectionUtils {
   companion object {
     private val TAG = ReflectionUtils::class.java.simpleName
 
-    internal fun getField(clazz: Class<*>, fieldName: String): Field? {
+    internal fun Field.setValueQuietly(obj: Any, value: Any) {
       try {
-        val f = clazz.getDeclaredField(fieldName)
-        f.isAccessible = true
-        return f
-      } catch (ignored: NoSuchFieldException) {
-      }
-
-      return null
-    }
-
-    internal fun getValue(field: Field, obj: Any): Any? {
-      try {
-        return field.get(obj)
+        set(obj, value)
       } catch (ignored: IllegalAccessException) {
       }
-
-      return null
-    }
-
-    internal fun setValue(field: Field, obj: Any, value: Any) {
-      try {
-        field.set(obj, value)
-      } catch (ignored: IllegalAccessException) {
-      }
-
     }
 
     @JvmStatic
