@@ -126,13 +126,15 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
    */
   override fun onActivityCreateView(parent: View, view: View, name: String, context: Context,
       attrs: AttributeSet): View? {
-    return ViewPump.get().inflate(InflateRequest.builder()
-        .name(name)
-        .context(context)
-        .attrs(attrs)
-        .parent(parent)
-        .fallbackViewCreator(ActivityViewCreator(this, view))
-        .build()).view
+    return ViewPump.get()
+        .inflate(InflateRequest(
+            name = name,
+            context = context,
+            attrs = attrs,
+            parent = parent,
+            fallbackViewCreator = ActivityViewCreator(this, view)
+        ))
+        .view
   }
 
   /**
@@ -141,13 +143,15 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
    */
   @Throws(ClassNotFoundException::class)
   override fun onCreateView(parent: View, name: String, attrs: AttributeSet): View? {
-    return ViewPump.get().inflate(InflateRequest.builder()
-        .name(name)
-        .context(context)
-        .attrs(attrs)
-        .parent(parent)
-        .fallbackViewCreator(parentAndNameAndAttrsViewCreator!!)
-        .build()).view
+    return ViewPump.get()
+        .inflate(InflateRequest(
+            name = name,
+            context = context,
+            attrs = attrs,
+            parent = parent,
+            fallbackViewCreator = parentAndNameAndAttrsViewCreator!!
+        ))
+        .view
   }
 
   /**
@@ -157,12 +161,14 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
    */
   @Throws(ClassNotFoundException::class)
   override fun onCreateView(name: String, attrs: AttributeSet): View? {
-    return ViewPump.get().inflate(InflateRequest.builder()
-        .name(name)
-        .context(context)
-        .attrs(attrs)
-        .fallbackViewCreator(nameAndAttrsViewCreator!!)
-        .build()).view
+    return ViewPump.get()
+        .inflate(InflateRequest(
+            name = name,
+            context = context,
+            attrs = attrs,
+            fallbackViewCreator = nameAndAttrsViewCreator!!
+        ))
+        .view
   }
 
   /**
@@ -291,12 +297,14 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
     }
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
-      return ViewPump.get().inflate(InflateRequest.builder()
-          .name(name)
-          .context(context)
-          .attrs(attrs)
-          .fallbackViewCreator(mViewCreator)
-          .build()).view
+      return ViewPump.get()
+          .inflate(InflateRequest(
+              name = name,
+              context = context,
+              attrs = attrs,
+              fallbackViewCreator = mViewCreator
+          ))
+          .view
     }
   }
 
@@ -321,13 +329,15 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
 
     override fun onCreateView(parent: View?, name: String, context: Context,
         attrs: AttributeSet): View? {
-      return ViewPump.get().inflate(InflateRequest.builder()
-          .name(name)
-          .context(context)
-          .attrs(attrs)
-          .parent(parent)
-          .fallbackViewCreator(mViewCreator)
-          .build()).view
+      return ViewPump.get()
+          .inflate(InflateRequest(
+              name = name,
+              context = context,
+              attrs = attrs,
+              parent = parent,
+              fallbackViewCreator = mViewCreator
+          ))
+          .view
     }
   }
 
@@ -350,13 +360,15 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
 
     override fun onCreateView(parent: View?, name: String, context: Context,
         attrs: AttributeSet): View? {
-      return ViewPump.get().inflate(InflateRequest.builder()
-          .name(name)
-          .context(context)
-          .attrs(attrs)
-          .parent(parent)
-          .fallbackViewCreator(mViewCreator)
-          .build()).view
+      return ViewPump.get()
+          .inflate(InflateRequest(
+              name = name,
+              context = context,
+              attrs = attrs,
+              parent = parent,
+              fallbackViewCreator = mViewCreator
+          ))
+          .view
     }
   }
 
@@ -375,7 +387,8 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
 
     private val sClassPrefixList = arrayOf("android.widget.", "android.webkit.")
     private val CONSTRUCTOR_ARGS_FIELD: Field by lazy {
-      requireNotNull(ReflectionUtils.getField(LayoutInflater::class.java, "CONSTRUCTOR_ARGS_FIELD")) {
+      requireNotNull(
+          ReflectionUtils.getField(LayoutInflater::class.java, "CONSTRUCTOR_ARGS_FIELD")) {
         "No constructor arguments field found in LayoutInflater!"
       }
     }

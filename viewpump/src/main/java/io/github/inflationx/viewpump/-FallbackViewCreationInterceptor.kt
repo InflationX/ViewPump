@@ -9,11 +9,11 @@ internal class FallbackViewCreationInterceptor : Interceptor {
     val fallbackView = viewCreator.onCreateView(request.parent, request.name, request.context,
         request.attrs)
 
-    return InflateResult.builder()
-        .view(fallbackView)
-        .name(fallbackView?.javaClass?.name ?: request.name)
-        .context(request.context)
-        .attrs(request.attrs)
-        .build()
+    return InflateResult(
+        view = fallbackView,
+        name = fallbackView?.javaClass?.name ?: request.name,
+        context = request.context,
+        attrs = request.attrs
+    )
   }
 }

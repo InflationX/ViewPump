@@ -10,9 +10,9 @@ data class InflateRequest(
     @get:JvmName("context")
     val context: Context,
     @get:JvmName("attrs")
-    val attrs: AttributeSet?,
+    val attrs: AttributeSet? = null,
     @get:JvmName("parent")
-    val parent: View?,
+    val parent: View? = null,
     @get:JvmName("fallbackViewCreator")
     val fallbackViewCreator: FallbackViewCreator
 ) {

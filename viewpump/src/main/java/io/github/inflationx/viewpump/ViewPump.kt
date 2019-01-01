@@ -155,11 +155,12 @@ class ViewPump private constructor(
      */
     @JvmStatic
     fun create(context: Context, clazz: Class<out View>): View? {
-      return get().inflate(InflateRequest.builder()
-          .context(context)
-          .name(clazz.name)
-          .fallbackViewCreator(reflectiveFallbackViewCreator)
-          .build())
+      return get()
+          .inflate(InflateRequest(
+              context = context,
+              name = clazz.name,
+              fallbackViewCreator = reflectiveFallbackViewCreator
+          ))
           .view
     }
 

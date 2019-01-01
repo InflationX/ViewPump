@@ -54,12 +54,12 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
      * method to enable view font injection if the view is created inside the activity onCreateView.
      *
      * You would implement this method like so in you base activity.
-     * <pre>
-     * `public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-     * return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
+     *
+     * ```
+     * public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
+     *   return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
      * }
-    ` *
-    </pre> *
+     * ```
      *
      * @param activity The activity the original that the ContextWrapper was attached too.
      * @param parent   Parent view from onCreateView

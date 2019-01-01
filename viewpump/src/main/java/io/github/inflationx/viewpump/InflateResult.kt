@@ -6,13 +6,13 @@ import android.view.View
 
 data class InflateResult(
     @get:JvmName("view")
-    val view: View?,
+    val view: View? = null,
     @get:JvmName("name")
     val name: String,
     @get:JvmName("context")
     val context: Context,
     @get:JvmName("attrs")
-    val attrs: AttributeSet?
+    val attrs: AttributeSet? = null
 ) {
 
   fun toBuilder(): Builder {
