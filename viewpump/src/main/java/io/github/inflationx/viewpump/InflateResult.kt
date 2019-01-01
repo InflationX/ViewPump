@@ -4,10 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 
-/**
- * Open for legacy reasons (was not `final` in Java)
- */
-open class InflateResult private constructor(
+data class InflateResult(
     @get:JvmName("view")
     val view: View?,
     @get:JvmName("name")
@@ -20,15 +17,6 @@ open class InflateResult private constructor(
 
   fun toBuilder(): Builder {
     return Builder(this)
-  }
-
-  override fun toString(): String {
-    return "InflateResult{" +
-        "view=" + view +
-        ", name=" + name +
-        ", context=" + context +
-        ", attrs=" + attrs +
-        '}'.toString()
   }
 
   class Builder {
