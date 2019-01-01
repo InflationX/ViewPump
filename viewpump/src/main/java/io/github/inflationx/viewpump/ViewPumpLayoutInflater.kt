@@ -263,7 +263,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
       // This mimics the {@code PhoneLayoutInflater} in the way it tries to inflate the base
       // classes, if this fails its pretty certain the app will fail at this point.
       var view: View? = null
-      for (prefix in sClassPrefixList) {
+      for (prefix in CLASS_PREFIX_LIST) {
         try {
           view = inflater.createView(name, prefix, attrs)
           if (view != null) {
@@ -384,7 +384,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
 
   companion object {
 
-    private val sClassPrefixList = arrayOf("android.widget.", "android.webkit.")
+    private val CLASS_PREFIX_LIST = setOf("android.widget.", "android.webkit.")
     private val CONSTRUCTOR_ARGS_FIELD: Field by lazy {
       requireNotNull(LayoutInflater::class.java.getDeclaredField("CONSTRUCTOR_ARGS_FIELD")) {
         "No constructor arguments field found in LayoutInflater!"
