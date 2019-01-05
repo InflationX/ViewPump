@@ -11,8 +11,8 @@ import java.lang.reflect.Field
 
 internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory {
 
-  private var nameAndAttrsViewCreator: FallbackViewCreator? = null
-  private var parentAndNameAndAttrsViewCreator: FallbackViewCreator? = null
+  private val nameAndAttrsViewCreator: FallbackViewCreator
+  private val parentAndNameAndAttrsViewCreator: FallbackViewCreator
 
   // Reflection Hax
   private var setPrivateFactory = false
