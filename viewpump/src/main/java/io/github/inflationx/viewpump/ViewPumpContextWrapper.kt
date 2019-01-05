@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import kotlin.LazyThreadSafetyMode.NONE
 
 /**
  * Uses the default configuration from [ViewPump]
@@ -18,13 +19,12 @@ import android.view.View
  */
 class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper(base) {
 
-  private var inflater: ViewPumpLayoutInflater? = null
+  private val inflater: ViewPumpLayoutInflater by lazy(NONE) {
+    ViewPumpLayoutInflater(LayoutInflater.from(baseContext), this, false)
+  }
 
   override fun getSystemService(name: String): Any? {
     if (Context.LAYOUT_INFLATER_SERVICE == name) {
-      if (inflater == null) {
-        inflater = ViewPumpLayoutInflater(LayoutInflater.from(baseContext), this, false)
-      }
       return inflater
     }
     return super.getSystemService(name)
