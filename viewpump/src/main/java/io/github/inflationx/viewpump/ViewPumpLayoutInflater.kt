@@ -229,7 +229,6 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
     } catch (e: ClassNotFoundException) {
       null
     }
-
   }
 
   // ===
