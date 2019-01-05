@@ -9,6 +9,10 @@ import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
 
 internal class ReflectiveFallbackViewCreator : FallbackViewCreator {
+  companion object {
+    private val CONSTRUCTOR_SIGNATURE_1: Array<Class<out Any>> = arrayOf(Context::class.java)
+    private val CONSTRUCTOR_SIGNATURE_2: Array<Class<out Any>> = arrayOf(Context::class.java, AttributeSet::class.java)
+  }
 
   override fun onCreateView(parent: View?, name: String, context: Context,
       attrs: AttributeSet?): View? {
@@ -39,12 +43,5 @@ internal class ReflectiveFallbackViewCreator : FallbackViewCreator {
     }
 
     return null
-  }
-
-  companion object {
-
-    private val CONSTRUCTOR_SIGNATURE_1: Array<Class<out Any>> = arrayOf(Context::class.java)
-
-    private val CONSTRUCTOR_SIGNATURE_2: Array<Class<out Any>> = arrayOf(Context::class.java, AttributeSet::class.java)
   }
 }
