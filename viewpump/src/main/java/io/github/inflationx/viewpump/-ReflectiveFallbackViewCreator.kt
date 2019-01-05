@@ -30,16 +30,24 @@ internal class ReflectiveFallbackViewCreator : FallbackViewCreator {
 
       constructor.isAccessible = true
       return constructor.newInstance(*constructorArgs)
-    } catch (e: ClassNotFoundException) {
-      e.printStackTrace()
-    } catch (e: NoSuchMethodException) {
-      e.printStackTrace()
-    } catch (e: IllegalAccessException) {
-      e.printStackTrace()
-    } catch (e: InstantiationException) {
-      e.printStackTrace()
-    } catch (e: InvocationTargetException) {
-      e.printStackTrace()
+    } catch(e: Exception) {
+      when (e) {
+        is ClassNotFoundException -> {
+          e.printStackTrace()
+        }
+        is NoSuchMethodException -> {
+          e.printStackTrace()
+        }
+        is IllegalAccessException -> {
+          e.printStackTrace()
+        }
+        is InstantiationException -> {
+          e.printStackTrace()
+        }
+        is InvocationTargetException -> {
+          e.printStackTrace()
+        }
+      }
     }
 
     return null
