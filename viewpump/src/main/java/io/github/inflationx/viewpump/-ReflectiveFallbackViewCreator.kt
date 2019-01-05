@@ -47,6 +47,7 @@ internal class ReflectiveFallbackViewCreator : FallbackViewCreator {
         is InvocationTargetException -> {
           e.printStackTrace()
         }
+        else -> throw e
       }
     }
 
