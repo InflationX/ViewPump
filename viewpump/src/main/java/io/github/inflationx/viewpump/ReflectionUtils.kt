@@ -43,7 +43,6 @@ open class ReflectionUtils {
       } catch (e: InvocationTargetException) {
         Log.d(TAG, "Can't invoke method using reflection", e)
       }
-
     }
   }
 }

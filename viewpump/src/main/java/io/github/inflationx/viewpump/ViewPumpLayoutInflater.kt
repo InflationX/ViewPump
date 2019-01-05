@@ -221,7 +221,6 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
     } catch (e: ClassNotFoundException) {
       null
     }
-
   }
 
   private fun superOnCreateView(name: String, attrs: AttributeSet?): View? {
@@ -271,7 +270,6 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
           }
         } catch (ignored: ClassNotFoundException) {
         }
-
       }
       // In this case we want to let the base class take a crack
       // at it.
