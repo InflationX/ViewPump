@@ -59,14 +59,14 @@ class ViewPump private constructor(
      *
      *  If you disable this you will need to override your [android.app.Activity.onCreateView]
      * as this is set as the [android.view.LayoutInflater] private factory.
-     * <br></br>
+     *
      * ** Use the following code in the Activity if you disable FactoryInjection:**
-     * <pre>`
+     * ```
      * @Override
      * public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-     * return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
+     *   return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
      * }
-    `</pre> *
+     * ```
      *
      * @param enabled True if private factory inject is allowed; otherwise, false.
      */
