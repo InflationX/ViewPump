@@ -287,11 +287,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
    */
   private class WrapperFactory(factory: LayoutInflater.Factory) : LayoutInflater.Factory {
 
-    private val viewCreator: FallbackViewCreator
-
-    init {
-      viewCreator = WrapperFactoryViewCreator(factory)
-    }
+    private val viewCreator: FallbackViewCreator = WrapperFactoryViewCreator(factory)
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
       return ViewPump.get()
