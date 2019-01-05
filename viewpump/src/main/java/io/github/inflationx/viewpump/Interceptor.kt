@@ -1,4 +1,4 @@
-package io.github.inflationx.viewpump;
+package io.github.inflationx.viewpump
 
 /**
  * Observes, modifies, and potentially short-circuits inflation requests going out and the
@@ -6,12 +6,12 @@ package io.github.inflationx.viewpump;
  * of the view to be inflated, return a programmatically instantiated view, or perform actions
  * on a view after it is inflated based on its Context or AttributeSet.
  */
-public interface Interceptor {
-    InflateResult intercept(Chain chain);
+interface Interceptor {
+  fun intercept(chain: Chain): InflateResult
 
-    interface Chain {
-        InflateRequest request();
+  interface Chain {
+    fun request(): InflateRequest
 
-        InflateResult proceed(InflateRequest request);
-    }
+    fun proceed(request: InflateRequest): InflateResult
+  }
 }
