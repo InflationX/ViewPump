@@ -1,4 +1,4 @@
-@file:JvmName("InterceptorChain")
+@file:JvmName("-InterceptorChain")
 package io.github.inflationx.viewpump
 
 /**
