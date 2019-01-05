@@ -56,8 +56,15 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
      * You would implement this method like so in you base activity.
      *
      * ```
+     * @Override
      * public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
      *   return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
+     * }
+     * ```
+     *
+     * ```
+     * override fun onCreateView(parent: View, name: String, context: Context, attrs: AttributeSet): View {
+     *   return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs)
      * }
      * ```
      *

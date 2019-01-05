@@ -61,10 +61,18 @@ class ViewPump private constructor(
      * as this is set as the [android.view.LayoutInflater] private factory.
      *
      * ** Use the following code in the Activity if you disable FactoryInjection:**
+     *
      * ```
      * @Override
      * public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
      *   return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs);
+     * }
+     * ```
+     *
+     * ```
+     * @Override
+     * override fun onCreateView(parent: View, name: String, context: Context, attrs: AttributeSet): View {
+     *   return ViewPumpContextWrapper.onActivityCreateView(this, parent, super.onCreateView(parent, name, context, attrs), name, context, attrs)
      * }
      * ```
      *

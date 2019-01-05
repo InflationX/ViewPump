@@ -13,8 +13,15 @@ internal interface ViewPumpActivityFactory {
    * You implement this method like so in you base activity.
    *
    * ```
+   * @Override
    * public View onCreateView(View parent, String name, Context context, AttributeSet attrs) {
-   *   return ViewPumpContextWrapper.get(getBaseContext()).onActivityCreateView(super.onCreateView(parent, name,context, attrs), attrs);
+   *   return ViewPumpContextWrapper.get(getBaseContext()).onActivityCreateView(super.onCreateView(parent, name, context, attrs), attrs);
+   * }
+   * ```
+   *
+   * ```
+   * override fun onCreateView(parent: View, name: String, context: Context, attrs: AttributeSet): View {
+   *   return ViewPumpContextWrapper.get(getBaseContext()).onActivityCreateView(super.onCreateView(parent, name, context, attrs), attrs)
    * }
    * ```
    *
