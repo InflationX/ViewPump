@@ -5,7 +5,6 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.github.inflationx.viewpump.ReflectionUtils.Companion.setValueQuietly
 import org.xmlpull.v1.XmlPullParser
 import java.lang.reflect.Field
 
@@ -103,14 +102,10 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
     }
 
     // TODO: we need to get this and wrap it if something has already set this
-    val setPrivateFactoryMethod = ReflectionUtils.getMethod(LayoutInflater::class.java,
-        "setPrivateFactory")
+    val setPrivateFactoryMethod = LayoutInflater::class.java.getAccessibleMethod("setPrivateFactory")
 
-    if (setPrivateFactoryMethod != null) {
-      ReflectionUtils.invokeMethod(this,
-          setPrivateFactoryMethod,
-          PrivateWrapperFactory2(context as LayoutInflater.Factory2, this))
-    }
+    setPrivateFactoryMethod.invokeMethod(this,
+        PrivateWrapperFactory2(context as LayoutInflater.Factory2, this))
     setPrivateFactory = true
   }
 
