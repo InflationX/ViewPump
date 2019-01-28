@@ -22,11 +22,13 @@ def isReleaseBuild() {
 }
 
 def getReleaseRepositoryUrl() {
-    return "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+  return hasProperty('RELEASE_REPOSITORY_URL') ? RELEASE_REPOSITORY_URL
+          : "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
 }
 
 def getSnapshotRepositoryUrl() {
-    return "https://oss.sonatype.org/content/repositories/snapshots/"
+  return hasProperty('SNAPSHOT_REPOSITORY_URL') ? SNAPSHOT_REPOSITORY_URL
+          : "https://oss.sonatype.org/content/repositories/snapshots/"
 }
 
 def getRepositoryUsername() {
@@ -100,7 +102,9 @@ afterEvaluate { project ->
     }
 
     task androidJavadocs(type: Javadoc) {
-        source = android.sourceSets.main.java.source
+        if (!project.plugins.hasPlugin('kotlin-android')) {
+          source = android.sourceSets.main.java.source
+        }
         classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
     }
 
