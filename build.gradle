@@ -12,8 +12,25 @@ buildscript {
 
 allprojects {
   repositories {
-    google()
-    mavenLocal()
+    maven {
+      url "https://maven.google.com"
+      content {
+        includeGroupByRegex "com\\.android.*"
+        includeGroupByRegex "androidx.*"
+      }
+    }
+    maven {
+      url "https://repo.maven.apache.org/maven2/"
+      content {
+        includeGroupByRegex "org\\.jetbrains.*"
+        includeGroupByRegex "com\\.jakewharton.*"
+        includeGroupByRegex "com\\.squareup.*"
+        includeGroupByRegex "junit.*"
+        includeGroupByRegex "org\\.assertj.*"
+        includeGroupByRegex "org\\.mockito.*"
+      }
+    }
+    mavenCentral()
     jcenter()
   }
   // Is Release Build?
