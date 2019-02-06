@@ -77,8 +77,8 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
      * @return The same view passed in, or null if null passed in.
      */
     @JvmStatic
-    fun onActivityCreateView(activity: Activity, parent: View, view: View, name: String,
-        context: Context, attr: AttributeSet): View? {
+    fun onActivityCreateView(activity: Activity, parent: View?, view: View, name: String,
+        context: Context, attr: AttributeSet?): View? {
       return get(activity).onActivityCreateView(parent, view, name, context, attr)
     }
 

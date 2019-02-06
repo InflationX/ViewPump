@@ -33,6 +33,6 @@ internal interface ViewPumpActivityFactory {
    * @return The view passed in, or null if nothing was passed in.
    * @see android.view.LayoutInflater.Factory2
    */
-  fun onActivityCreateView(parent: View, view: View, name: String, context: Context,
-      attrs: AttributeSet): View?
+  fun onActivityCreateView(parent: View?, view: View, name: String, context: Context,
+      attrs: AttributeSet?): View?
 }
