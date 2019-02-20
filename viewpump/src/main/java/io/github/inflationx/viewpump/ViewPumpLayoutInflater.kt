@@ -143,7 +143,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
             context = context,
             attrs = attrs,
             parent = parent,
-            fallbackViewCreator = parentAndNameAndAttrsViewCreator!!
+            fallbackViewCreator = parentAndNameAndAttrsViewCreator
         ))
         .view
   }
@@ -160,7 +160,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, ViewPumpActivityFactory 
             name = name,
             context = context,
             attrs = attrs,
-            fallbackViewCreator = nameAndAttrsViewCreator!!
+            fallbackViewCreator = nameAndAttrsViewCreator
         ))
         .view
   }
