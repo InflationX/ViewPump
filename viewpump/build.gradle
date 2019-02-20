@@ -29,22 +29,15 @@ android {
         textOutput 'stdout'
         textReport System.getenv('CI') == 'true'
     }
+    libraryVariants.all {
+        // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+        it.generateBuildConfig.enabled = false
+    }
 }
 
 dokka {
-    // These don't quite work yet with the maven publish plugin
-    externalDocumentationLink {
-        url = new URL("https://developer.android.com/reference/")
-        packageListUrl =
-            new URL("https://developer.android.com/reference/package-list")
-    }
-    externalDocumentationLink {
-        url = new URL("https://docs.oracle.com/javase/7/docs/api/")
-    }
-
     includeNonPublic = false
     skipDeprecated = true
-    outputFormat = 'html' // Overridden by the publish plugin for now
     includes = ['Module.md']
 }
 
