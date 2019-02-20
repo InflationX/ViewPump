@@ -29,6 +29,10 @@ android {
         textOutput 'stdout'
         textReport System.getenv('CI') == 'true'
     }
+    libraryVariants.all {
+        // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
+        it.generateBuildConfig.enabled = false
+    }
 }
 
 dokka {
