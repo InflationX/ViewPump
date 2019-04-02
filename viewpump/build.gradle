@@ -7,6 +7,10 @@ dokka {
     skipDeprecated = true
     jdkVersion = 7
     includes = ['Module.md']
+    packageOptions {
+        prefix = "io.github.inflationx.viewpump.internal"
+        suppress = true
+    }
     externalDocumentationLink {
         url = new URL("https://developer.android.com/reference/")
         packageListUrl =

@@ -1,5 +1,5 @@
 @file:JvmName("-ReflectionUtils")
-package io.github.inflationx.viewpump
+package io.github.inflationx.viewpump.internal
 
 import android.util.Log
 

@@ -1,5 +1,5 @@
 @file:JvmName("-ViewPumpActivityFactory")
-package io.github.inflationx.viewpump
+package io.github.inflationx.viewpump.internal
 
 import android.content.Context
 import android.util.AttributeSet
