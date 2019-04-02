@@ -1,10 +1,18 @@
 apply plugin: 'com.android.library'
 apply plugin: 'org.jetbrains.kotlin.android'
 apply plugin: 'org.jetbrains.dokka-android'
-apply plugin: 'com.vanniktech.maven.publish'
 
-group = GROUP
-version = VERSION_NAME
+dokka {
+    reportUndocumented = false
+    skipDeprecated = true
+    jdkVersion = 7
+    includes = ['Module.md']
+    externalDocumentationLink {
+        url = new URL("https://developer.android.com/reference/")
+        packageListUrl =
+            new URL("https://developer.android.com/reference/androidx/package-list")
+    }
+}
 
 android {
     compileSdkVersion 28
@@ -33,12 +41,6 @@ android {
     }
 }
 
-dokka {
-    includeNonPublic = false
-    skipDeprecated = true
-    includes = ['Module.md']
-}
-
 dependencies {
     compileOnly 'androidx.appcompat:appcompat:1.0.2'
     api 'org.jetbrains.kotlin:kotlin-stdlib:1.3.21'
@@ -50,3 +52,5 @@ dependencies {
     testImplementation 'androidx.annotation:annotation:1.0.2'
     testImplementation 'androidx.test:runner:1.1.1'
 }
+
+apply plugin: 'com.vanniktech.maven.publish'

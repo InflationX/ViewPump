@@ -17,14 +17,15 @@ buildscript {
     mavenCentral()
     jcenter()
     maven {
-      url "https://oss.sonatype.org/content/repositories/snapshots/" // For maven publish plugin until 0.8.0 is released
+      // For maven publish plugin until 0.9.0 is released
+      url "https://oss.sonatype.org/content/repositories/snapshots/"
     }
   }
   dependencies {
     classpath 'com.android.tools.build:gradle:3.3.2'
     classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.21'
-    classpath 'org.jetbrains.dokka:dokka-gradle-plugin:0.9.17'
-    classpath 'com.vanniktech:gradle-maven-publish-plugin:0.8.0'
+    classpath 'org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18'
+    classpath 'com.vanniktech:gradle-maven-publish-plugin:0.9.0-SNAPSHOT'
   }
 }
 
