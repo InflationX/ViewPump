@@ -3,12 +3,6 @@ package io.github.inflationx.viewpump.test;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
 import io.github.inflationx.viewpump.FallbackViewCreator;
 import io.github.inflationx.viewpump.InflateRequest;
 import io.github.inflationx.viewpump.InflateResult;
@@ -21,11 +15,13 @@ import io.github.inflationx.viewpump.util.SingleConstructorTestView;
 import io.github.inflationx.viewpump.util.TestFallbackViewCreator;
 import io.github.inflationx.viewpump.util.TestPostInflationInterceptor;
 import io.github.inflationx.viewpump.util.TestView;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.ArgumentMatchers.nullable;
-import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
