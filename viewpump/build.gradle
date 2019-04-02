@@ -14,14 +14,6 @@ android {
         minSdkVersion 14
         targetSdkVersion 28
     }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt')
-        }
-    }
-
     lintOptions {
         // we don't always want to use the latest version of the support library
         disable 'GradleDependency'
@@ -30,7 +22,14 @@ android {
     }
     libraryVariants.all {
         // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
-        it.generateBuildConfig.enabled = false
+        it.generateBuildConfigProvider.configure {
+            it.enabled = false
+        }
+    }
+    variantFilter { variant ->
+        if (variant.buildType.name == 'debug') {
+            variant.setIgnore(true)
+        }
     }
 }
 
