@@ -6,6 +6,7 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
+import io.github.inflationx.viewpump.internal.ViewPumpActivityFactory
 import kotlin.LazyThreadSafetyMode.NONE
 
 /**

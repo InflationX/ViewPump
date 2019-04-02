@@ -3,6 +3,9 @@ package io.github.inflationx.viewpump
 import android.content.Context
 import android.view.View
 import androidx.annotation.MainThread
+import io.github.inflationx.viewpump.internal.FallbackViewCreationInterceptor
+import io.github.inflationx.viewpump.internal.InterceptorChain
+import io.github.inflationx.viewpump.internal.ReflectiveFallbackViewCreator
 
 class ViewPump private constructor(
     /** List of interceptors.  */
@@ -26,7 +29,8 @@ class ViewPump private constructor(
   private val interceptorsWithFallback: List<Interceptor> = (interceptors + FallbackViewCreationInterceptor()).toMutableList()
 
   fun inflate(originalRequest: InflateRequest): InflateResult {
-    val chain = InterceptorChain(interceptorsWithFallback, 0, originalRequest)
+    val chain = InterceptorChain(interceptorsWithFallback, 0,
+        originalRequest)
     return chain.proceed(originalRequest)
   }
 

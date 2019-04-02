@@ -3,7 +3,6 @@ package io.github.inflationx.viewpump.util;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
-
 import androidx.annotation.Nullable;
 
 public class TestView extends View {

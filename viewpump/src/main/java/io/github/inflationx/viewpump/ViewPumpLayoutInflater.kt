@@ -5,6 +5,10 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import io.github.inflationx.viewpump.internal.ViewPumpActivityFactory
+import io.github.inflationx.viewpump.internal.getAccessibleMethod
+import io.github.inflationx.viewpump.internal.invokeMethod
+import io.github.inflationx.viewpump.internal.setValueQuietly
 import org.xmlpull.v1.XmlPullParser
 import java.lang.reflect.Field
 

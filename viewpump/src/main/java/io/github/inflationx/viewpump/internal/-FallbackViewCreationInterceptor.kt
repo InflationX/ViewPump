@@ -1,9 +1,13 @@
 @file:JvmName("-FallbackViewCreationInterceptor")
-package io.github.inflationx.viewpump
+package io.github.inflationx.viewpump.internal
+
+import io.github.inflationx.viewpump.InflateResult
+import io.github.inflationx.viewpump.Interceptor
+import io.github.inflationx.viewpump.Interceptor.Chain
 
 internal class FallbackViewCreationInterceptor : Interceptor {
 
-  override fun intercept(chain: Interceptor.Chain): InflateResult {
+  override fun intercept(chain: Chain): InflateResult {
     val request = chain.request()
     val viewCreator = request.fallbackViewCreator
     val fallbackView = viewCreator.onCreateView(request.parent, request.name, request.context,

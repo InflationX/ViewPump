@@ -1,9 +1,10 @@
 @file:JvmName("-ReflectiveFallbackViewCreator")
-package io.github.inflationx.viewpump
+package io.github.inflationx.viewpump.internal
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import io.github.inflationx.viewpump.FallbackViewCreator
 
 import java.lang.reflect.Constructor
 import java.lang.reflect.InvocationTargetException
