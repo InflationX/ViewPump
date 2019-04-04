@@ -6,7 +6,8 @@ import android.content.ContextWrapper
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
-import io.github.inflationx.viewpump.internal.ViewPumpActivityFactory
+import io.github.inflationx.viewpump.internal.`-ViewPumpActivityFactory`
+import io.github.inflationx.viewpump.internal.`-ViewPumpLayoutInflater`
 import kotlin.LazyThreadSafetyMode.NONE
 
 /**
@@ -20,8 +21,9 @@ import kotlin.LazyThreadSafetyMode.NONE
  */
 class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper(base) {
 
-  private val inflater: ViewPumpLayoutInflater by lazy(NONE) {
-    ViewPumpLayoutInflater(LayoutInflater.from(baseContext), this, false)
+  private val inflater: `-ViewPumpLayoutInflater` by lazy(NONE) {
+    `-ViewPumpLayoutInflater`(
+        LayoutInflater.from(baseContext), this, false)
   }
 
   override fun getSystemService(name: String): Any? {
@@ -90,12 +92,12 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
      * @return Interface allowing you to call onActivityViewCreated
      */
     @JvmStatic
-    internal fun get(activity: Activity): ViewPumpActivityFactory {
-      if (activity.layoutInflater !is ViewPumpLayoutInflater) {
+    internal fun get(activity: Activity): `-ViewPumpActivityFactory` {
+      if (activity.layoutInflater !is `-ViewPumpLayoutInflater`) {
         throw RuntimeException(
             "This activity does not wrap the Base Context! See ViewPumpContextWrapper.wrap(Context)")
       }
-      return activity.layoutInflater as ViewPumpActivityFactory
+      return activity.layoutInflater as `-ViewPumpActivityFactory`
     }
   }
 }
