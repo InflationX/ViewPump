@@ -1,18 +1,20 @@
-package io.github.inflationx.viewpump
+@file:JvmName("-ViewPumpLayoutInflater")
+package io.github.inflationx.viewpump.internal
 
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import io.github.inflationx.viewpump.internal.`-ViewPumpActivityFactory`
-import io.github.inflationx.viewpump.internal.getAccessibleMethod
-import io.github.inflationx.viewpump.internal.invokeMethod
-import io.github.inflationx.viewpump.internal.setValueQuietly
+import io.github.inflationx.viewpump.FallbackViewCreator
+import io.github.inflationx.viewpump.InflateRequest
+import io.github.inflationx.viewpump.R.id
+import io.github.inflationx.viewpump.ViewPump
 import org.xmlpull.v1.XmlPullParser
 import java.lang.reflect.Field
 
-internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactory` {
+@Suppress("ClassName")
+internal class `-ViewPumpLayoutInflater` : LayoutInflater, `-ViewPumpActivityFactory` {
 
   private val nameAndAttrsViewCreator: FallbackViewCreator
   private val parentAndNameAndAttrsViewCreator: FallbackViewCreator
@@ -24,21 +26,25 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
 
   protected constructor(context: Context) : super(context) {
     storeLayoutResId = ViewPump.get().isStoreLayoutResId
-    nameAndAttrsViewCreator = NameAndAttrsViewCreator(this)
-    parentAndNameAndAttrsViewCreator = ParentAndNameAndAttrsViewCreator(this)
+    nameAndAttrsViewCreator = NameAndAttrsViewCreator(
+        this)
+    parentAndNameAndAttrsViewCreator = ParentAndNameAndAttrsViewCreator(
+        this)
     setUpLayoutFactories(false)
   }
 
   constructor(original: LayoutInflater, newContext: Context, cloned: Boolean) : super(original,
       newContext) {
     storeLayoutResId = ViewPump.get().isStoreLayoutResId
-    nameAndAttrsViewCreator = NameAndAttrsViewCreator(this)
-    parentAndNameAndAttrsViewCreator = ParentAndNameAndAttrsViewCreator(this)
+    nameAndAttrsViewCreator = NameAndAttrsViewCreator(
+        this)
+    parentAndNameAndAttrsViewCreator = ParentAndNameAndAttrsViewCreator(
+        this)
     setUpLayoutFactories(cloned)
   }
 
   override fun cloneInContext(newContext: Context): LayoutInflater {
-    return ViewPumpLayoutInflater(this, newContext, true)
+    return `-ViewPumpLayoutInflater`(this, newContext, true)
   }
 
   // ===
@@ -48,7 +54,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
   override fun inflate(resource: Int, root: ViewGroup?, attachToRoot: Boolean): View? {
     val view = super.inflate(resource, root, attachToRoot)
     if (view != null && storeLayoutResId) {
-      view.setTag(R.id.viewpump_layout_res, resource)
+      view.setTag(id.viewpump_layout_res, resource)
     }
     return view
   }
@@ -78,7 +84,8 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
   override fun setFactory(factory: LayoutInflater.Factory) {
     // Only set our factory and wrap calls to the Factory trying to be set!
     if (factory !is WrapperFactory) {
-      super.setFactory(WrapperFactory(factory))
+      super.setFactory(
+          WrapperFactory(factory))
     } else {
       super.setFactory(factory)
     }
@@ -88,7 +95,8 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
     // Only set our factory and wrap calls to the Factory2 trying to be set!
     if (factory2 !is WrapperFactory2) {
       // LayoutInflaterCompat.setFactory(this, new WrapperFactory2(factory2, mViewPumpFactory));
-      super.setFactory2(WrapperFactory2(factory2))
+      super.setFactory2(
+          WrapperFactory2(factory2))
     } else {
       super.setFactory2(factory2)
     }
@@ -109,7 +117,8 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
     val setPrivateFactoryMethod = LayoutInflater::class.java.getAccessibleMethod("setPrivateFactory")
 
     setPrivateFactoryMethod.invokeMethod(this,
-        PrivateWrapperFactory2(context as LayoutInflater.Factory2, this))
+        PrivateWrapperFactory2(
+            context as Factory2, this))
     setPrivateFactory = true
   }
 
@@ -130,7 +139,8 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
             context = context,
             attrs = attrs,
             parent = parent,
-            fallbackViewCreator = ActivityViewCreator(this, view)
+            fallbackViewCreator = ActivityViewCreator(
+                this, view)
         ))
         .view
   }
@@ -234,7 +244,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
   // View creators
   // ===
 
-  private class ActivityViewCreator(private val inflater: ViewPumpLayoutInflater,
+  private class ActivityViewCreator(private val inflater: `-ViewPumpLayoutInflater`,
       private val view: View) : FallbackViewCreator {
 
     override fun onCreateView(parent: View?, name: String, context: Context,
@@ -244,7 +254,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
   }
 
   private class ParentAndNameAndAttrsViewCreator(
-      private val inflater: ViewPumpLayoutInflater) : FallbackViewCreator {
+      private val inflater: `-ViewPumpLayoutInflater`) : FallbackViewCreator {
 
     override fun onCreateView(parent: View?, name: String, context: Context,
         attrs: AttributeSet?): View? {
@@ -253,7 +263,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
   }
 
   private class NameAndAttrsViewCreator(
-      private val inflater: ViewPumpLayoutInflater) : FallbackViewCreator {
+      private val inflater: `-ViewPumpLayoutInflater`) : FallbackViewCreator {
 
     override fun onCreateView(parent: View?, name: String, context: Context,
         attrs: AttributeSet?): View? {
@@ -285,7 +295,8 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
    */
   private class WrapperFactory(factory: LayoutInflater.Factory) : LayoutInflater.Factory {
 
-    private val viewCreator: FallbackViewCreator = WrapperFactoryViewCreator(factory)
+    private val viewCreator: FallbackViewCreator = WrapperFactoryViewCreator(
+        factory)
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet?): View? {
       return ViewPump.get()
@@ -312,7 +323,8 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
    * Factory 2 is the second port of call for LayoutInflation
    */
   private open class WrapperFactory2(factory2: LayoutInflater.Factory2) : LayoutInflater.Factory2 {
-    private val viewCreator = WrapperFactory2ViewCreator(factory2)
+    private val viewCreator = WrapperFactory2ViewCreator(
+        factory2)
 
     override fun onCreateView(name: String, context: Context, attrs: AttributeSet?): View? {
       return onCreateView(null, name, context, attrs)
@@ -345,9 +357,10 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
    * Private factory is step three for Activity Inflation, this is what is attached to the Activity
    */
   private class PrivateWrapperFactory2(factory2: LayoutInflater.Factory2,
-      inflater: ViewPumpLayoutInflater) : WrapperFactory2(factory2) {
+      inflater: `-ViewPumpLayoutInflater`) : WrapperFactory2(factory2) {
 
-    private val viewCreator = PrivateWrapperFactory2ViewCreator(factory2, inflater)
+    private val viewCreator = PrivateWrapperFactory2ViewCreator(
+        factory2, inflater)
 
     override fun onCreateView(parent: View?, name: String, context: Context,
         attrs: AttributeSet?): View? {
@@ -364,7 +377,7 @@ internal class ViewPumpLayoutInflater : LayoutInflater, `-ViewPumpActivityFactor
   }
 
   private class PrivateWrapperFactory2ViewCreator(factory2: LayoutInflater.Factory2,
-      private val inflater: ViewPumpLayoutInflater) : WrapperFactory2ViewCreator(
+      private val inflater: `-ViewPumpLayoutInflater`) : WrapperFactory2ViewCreator(
       factory2), FallbackViewCreator {
 
     override fun onCreateView(parent: View?, name: String, context: Context,
