@@ -1,5 +1,13 @@
 # Changelog
 
+## Version 2.0.1 *(2019-04-03)*
+
+- Fix nullability and reflection field name
+- Disabled generation of unused BuildConfig
+- Cleaned up consumer proguard rules
+- Update Kotlin to 1.3.21 and use it as `api` dependency
+- Add proper Dokka support
+
 ## Version 2.0.0 *(2019-01-28)*
 
 - **Breaking change:** Project migrated to [AndroidX](https://developer.android.com/jetpack/androidx/). See the [class and package mappings](https://developer.android.com/jetpack/androidx/migrate) for help migrating
