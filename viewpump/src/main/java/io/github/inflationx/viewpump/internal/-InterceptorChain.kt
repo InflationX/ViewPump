@@ -9,7 +9,8 @@ import io.github.inflationx.viewpump.Interceptor.Chain
 /**
  * A concrete interceptor chain that carries the entire interceptor chain.
  */
-internal class InterceptorChain(private val interceptors: List<Interceptor>, private val index: Int,
+@Suppress("ClassName")
+internal class `-InterceptorChain`(private val interceptors: List<Interceptor>, private val index: Int,
     private val request: InflateRequest) : Chain {
 
   override fun request(): InflateRequest {
@@ -22,7 +23,7 @@ internal class InterceptorChain(private val interceptors: List<Interceptor>, pri
     }
 
     // Call the next interceptor in the chain.
-    val next = InterceptorChain(interceptors, index + 1,
+    val next = `-InterceptorChain`(interceptors, index + 1,
         request)
     val interceptor = interceptors[index]
 

@@ -5,7 +5,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 
-internal interface ViewPumpActivityFactory {
+@Suppress("ClassName")
+internal interface `-ViewPumpActivityFactory` {
 
   /**
    * Used to Wrap the Activity onCreateView method.

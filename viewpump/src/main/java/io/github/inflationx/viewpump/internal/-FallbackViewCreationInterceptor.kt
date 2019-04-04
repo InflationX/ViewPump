@@ -5,7 +5,8 @@ import io.github.inflationx.viewpump.InflateResult
 import io.github.inflationx.viewpump.Interceptor
 import io.github.inflationx.viewpump.Interceptor.Chain
 
-internal class FallbackViewCreationInterceptor : Interceptor {
+@Suppress("ClassName")
+internal class `-FallbackViewCreationInterceptor` : Interceptor {
 
   override fun intercept(chain: Chain): InflateResult {
     val request = chain.request()
