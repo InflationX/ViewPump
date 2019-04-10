@@ -44,9 +44,8 @@ public class CustomTextViewInterceptor implements Interceptor {
     @Override
     public InflateResult intercept(Chain chain) {
         InflateRequest request = chain.request();
-        View view = inflateView(request.name(), request.context(), request.attrs());
-
-        if (view != null) {
+        if (request.name().endsWith("TextView")) {
+            CustomTextView view = new CustomTextView(request.context(), request.attrs());
             return InflateResult.builder()
                     .view(view)
                     .name(view.getClass().getName())
