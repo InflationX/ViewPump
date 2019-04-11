@@ -13,7 +13,7 @@ Include the dependency [Download (.aar)](http://search.maven.org/remotecontent?f
 
 ```groovy
 dependencies {
-    compile 'io.github.inflationx:viewpump:2.0.1'
+    implementation 'io.github.inflationx:viewpump:2.0.1'
 }
 ```
 
