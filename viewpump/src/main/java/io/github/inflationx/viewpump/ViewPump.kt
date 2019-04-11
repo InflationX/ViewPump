@@ -3,6 +3,8 @@ package io.github.inflationx.viewpump
 import android.content.Context
 import android.view.View
 import androidx.annotation.MainThread
+import io.github.inflationx.viewpump.Interceptor.Chain
+import io.github.inflationx.viewpump.ViewPump.Builder
 import io.github.inflationx.viewpump.internal.`-FallbackViewCreationInterceptor`
 import io.github.inflationx.viewpump.internal.`-InterceptorChain`
 import io.github.inflationx.viewpump.internal.`-ReflectiveFallbackViewCreator`
@@ -183,4 +185,11 @@ class ViewPump private constructor(
       return Builder()
     }
   }
+}
+
+/**
+ * Adds an [Interceptor] to this current [Builder] for idiomatic Kotlin higher order function usage.
+ */
+inline fun Builder.addInterceptor(crossinline block: (chain: Chain) -> InflateResult) = apply {
+  addInterceptor(Interceptor.invoke(block))
 }
