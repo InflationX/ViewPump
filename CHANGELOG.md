@@ -1,5 +1,10 @@
 # Changelog
 
+## Version 2.0.2 *(2019-04-16)*
+
+- Fix SAM invocation of Interceptor instances
+- Add `Builder.addInterceptor()` convenience extension function
+
 ## Version 2.0.1 *(2019-04-03)*
 
 - Fix nullability and reflection field name
