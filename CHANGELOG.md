@@ -2,8 +2,8 @@
 
 ## Version 2.0.2 *(2019-04-16)*
 
-- Fix SAM invocation of Interceptor instances
-- Add `Builder.addInterceptor()` convenience extension function
+- Fix SAM invocation of Interceptor instances via `operator fun invoke()` extension
+- Add `Builder.addInterceptor()` convenience extension function that accepts a `(Chain) -> InflateResult` parameter
 
 ## Version 2.0.1 *(2019-04-03)*
 
