@@ -33,6 +33,12 @@
             android:layout_marginTop="8dp"
             android:text="@string/regular_button"/>
 
+        <io.github.inflationx.viewpump.sample.CustomButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/custom_button"/>
+
     </LinearLayout>
 
 </merge>

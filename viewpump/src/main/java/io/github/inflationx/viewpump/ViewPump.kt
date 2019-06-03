@@ -24,7 +24,10 @@ class ViewPump private constructor(
 
     /** Store the resourceId for the layout used to inflate the View in the View tag.  */
     @get:JvmName("isStoreLayoutResId")
-    val isStoreLayoutResId: Boolean
+    val isStoreLayoutResId: Boolean,
+
+    @get:JvmName("isUseAppCompatViewInflater")
+    val isUseAppCompatViewInflater: Boolean
 ) {
 
   /** List that gets cleared and reused as it holds interceptors with the fallback added.  */
@@ -136,7 +139,8 @@ class ViewPump private constructor(
           interceptors = interceptors.toList(),
           isReflection = reflection,
           isCustomViewCreation = customViewCreation,
-          isStoreLayoutResId = storeLayoutResId
+          isStoreLayoutResId = storeLayoutResId,
+          isUseAppCompatViewInflater = true
       )
     }
   }

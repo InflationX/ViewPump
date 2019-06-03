@@ -2,10 +2,14 @@
 package io.github.inflationx.viewpump.internal
 
 import android.content.Context
+import android.os.Build
+import android.os.Build.VERSION_CODES.P
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.ViewPumpViewInflater
+import androidx.core.os.BuildCompat
 import io.github.inflationx.viewpump.FallbackViewCreator
 import io.github.inflationx.viewpump.InflateRequest
 import io.github.inflationx.viewpump.R.id
@@ -22,6 +26,7 @@ internal class `-ViewPumpLayoutInflater`(
 
   private val nameAndAttrsViewCreator: FallbackViewCreator = NameAndAttrsViewCreator(this)
   private val parentAndNameAndAttrsViewCreator: FallbackViewCreator = ParentAndNameAndAttrsViewCreator(this)
+  private val viewPumpViewInflater = ViewPumpViewInflater()
 
   // Reflection Hax
   private var setPrivateFactory = false
@@ -201,20 +206,24 @@ internal class `-ViewPumpLayoutInflater`(
     // If CustomViewCreation is off skip this.
     if (!ViewPump.get().isCustomViewCreation) return mutableView
     if (mutableView == null && name.indexOf('.') > -1) {
-      @Suppress("UNCHECKED_CAST")
-      val constructorArgsArr = CONSTRUCTOR_ARGS_FIELD.get(this) as Array<Any>
-      val lastContext = constructorArgsArr[0]
-      // The LayoutInflater actually finds out the correct context to use. We just need to set
-      // it on the mConstructor for the internal method.
-      // Set the constructor ars up for the createView, not sure why we can't pass these in.
-      constructorArgsArr[0] = viewContext
-      CONSTRUCTOR_ARGS_FIELD.setValueQuietly(this, constructorArgsArr)
-      try {
-        mutableView = createView(name, null, attrs)
-      } catch (ignored: ClassNotFoundException) {
-      } finally {
-        constructorArgsArr[0] = lastContext
-        CONSTRUCTOR_ARGS_FIELD.setValueQuietly(this, constructorArgsArr)
+      if (ViewPump.get().isUseAppCompatViewInflater) {
+        viewPumpViewInflater.createView(view, name, viewContext, attrs!!)
+      } else {
+        @Suppress("UNCHECKED_CAST")
+        val constructorArgsArr = CONSTRUCTOR_ARGS_FIELD!!.get(this) as Array<Any>
+        val lastContext = constructorArgsArr[0]
+        // The LayoutInflater actually finds out the correct context to use. We just need to set
+        // it on the mConstructor for the internal method.
+        // Set the constructor ars up for the createView, not sure why we can't pass these in.
+        constructorArgsArr[0] = viewContext
+        CONSTRUCTOR_ARGS_FIELD!!.setValueQuietly(this, constructorArgsArr)
+        try {
+          mutableView = createView(name, null, attrs)
+        } catch (ignored: ClassNotFoundException) {
+        } finally {
+          constructorArgsArr[0] = lastContext
+          CONSTRUCTOR_ARGS_FIELD!!.setValueQuietly(this, constructorArgsArr)
+        }
       }
     }
     return mutableView
@@ -417,11 +426,12 @@ internal class `-ViewPumpLayoutInflater`(
 
   companion object {
     private val CLASS_PREFIX_LIST = setOf("android.widget.", "android.webkit.")
-    private val CONSTRUCTOR_ARGS_FIELD: Field by lazy {
-      requireNotNull(LayoutInflater::class.java.getDeclaredField("mConstructorArgs")) {
-        "No constructor arguments field found in LayoutInflater!"
-      }.apply { isAccessible = true }
+    private val CONSTRUCTOR_ARGS_FIELD: Field? by lazy {
+      try {
+        LayoutInflater::class.java.getDeclaredField("mConstructorArgs").apply { isAccessible = true }
+      } catch (e: NoSuchFieldException) {
+        null
+      }
     }
   }
-
 }
