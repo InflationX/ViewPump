@@ -6,6 +6,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.os.BuildCompat
 import io.github.inflationx.viewpump.FallbackViewCreator
 import io.github.inflationx.viewpump.InflateRequest
 import io.github.inflationx.viewpump.R.id
@@ -201,20 +202,24 @@ internal class `-ViewPumpLayoutInflater`(
     // If CustomViewCreation is off skip this.
     if (!ViewPump.get().isCustomViewCreation) return mutableView
     if (mutableView == null && name.indexOf('.') > -1) {
-      @Suppress("UNCHECKED_CAST")
-      val constructorArgsArr = CONSTRUCTOR_ARGS_FIELD.get(this) as Array<Any>
-      val lastContext = constructorArgsArr[0]
-      // The LayoutInflater actually finds out the correct context to use. We just need to set
-      // it on the mConstructor for the internal method.
-      // Set the constructor ars up for the createView, not sure why we can't pass these in.
-      constructorArgsArr[0] = viewContext
-      CONSTRUCTOR_ARGS_FIELD.setValueQuietly(this, constructorArgsArr)
-      try {
-        mutableView = createView(name, null, attrs)
-      } catch (ignored: ClassNotFoundException) {
-      } finally {
-        constructorArgsArr[0] = lastContext
+      if (BuildCompat.isAtLeastQ()) {
+        mutableView = cloneInContext(viewContext).createView(name, null, attrs)
+      } else {
+        @Suppress("UNCHECKED_CAST")
+        val constructorArgsArr = CONSTRUCTOR_ARGS_FIELD.get(this) as Array<Any>
+        val lastContext = constructorArgsArr[0]
+        // The LayoutInflater actually finds out the correct context to use. We just need to set
+        // it on the mConstructor for the internal method.
+        // Set the constructor ars up for the createView, not sure why we can't pass these in.
+        constructorArgsArr[0] = viewContext
         CONSTRUCTOR_ARGS_FIELD.setValueQuietly(this, constructorArgsArr)
+        try {
+          mutableView = createView(name, null, attrs)
+        } catch (ignored: ClassNotFoundException) {
+        } finally {
+          constructorArgsArr[0] = lastContext
+          CONSTRUCTOR_ARGS_FIELD.setValueQuietly(this, constructorArgsArr)
+        }
       }
     }
     return mutableView
