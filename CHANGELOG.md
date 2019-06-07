@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.0.3 *(2019-06-07)*
+- Update the LayoutInflater to be compatible with Android Q
+
 ## Version 2.0.2 *(2019-04-16)*
 
 - Fix SAM invocation of Interceptor instances via `operator fun invoke()` extension
