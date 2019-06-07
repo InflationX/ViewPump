@@ -2,6 +2,7 @@
 package io.github.inflationx.viewpump.internal
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -20,6 +21,8 @@ internal class `-ViewPumpLayoutInflater`(
     newContext: Context,
     cloned: Boolean
 ) : LayoutInflater(original, newContext), `-ViewPumpActivityFactory` {
+
+  private val IS_AT_LEAST_Q = Build.VERSION.SDK_INT > Build.VERSION_CODES.P || BuildCompat.isAtLeastQ()
 
   private val nameAndAttrsViewCreator: FallbackViewCreator = NameAndAttrsViewCreator(this)
   private val parentAndNameAndAttrsViewCreator: FallbackViewCreator = ParentAndNameAndAttrsViewCreator(this)
@@ -202,7 +205,7 @@ internal class `-ViewPumpLayoutInflater`(
     // If CustomViewCreation is off skip this.
     if (!ViewPump.get().isCustomViewCreation) return mutableView
     if (mutableView == null && name.indexOf('.') > -1) {
-      if (BuildCompat.isAtLeastQ()) {
+      if (IS_AT_LEAST_Q) {
         mutableView = cloneInContext(viewContext).createView(name, null, attrs)
       } else {
         @Suppress("UNCHECKED_CAST")
