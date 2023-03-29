@@ -15,6 +15,8 @@ import io.github.inflationx.viewpump.util.SingleConstructorTestView;
 import io.github.inflationx.viewpump.util.TestFallbackViewCreator;
 import io.github.inflationx.viewpump.util.TestPostInflationInterceptor;
 import io.github.inflationx.viewpump.util.TestView;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -37,7 +39,11 @@ public class ViewPumpTest {
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        ViewPump.init(null);
+    }
+
+    @After
+    public void tearDown() {
+        ViewPump.reset();
     }
 
     @Test
@@ -272,5 +278,23 @@ public class ViewPumpTest {
 
         assertThat(((TestView) view).isSameContextAs(mockContext)).isTrue();
         assertThat(((TestView) view).isPostProcessed()).isTrue();
+    }
+
+    @Test
+    public void reset() {
+        ViewPump first = ViewPump.builder()
+                .addInterceptor(new TestPostInflationInterceptor())
+                .build();
+        ViewPump.init(first);
+
+        assertThat(ViewPump.get())
+                .isSameAs(first);
+
+        // Now reset
+        ViewPump.reset();
+
+        // Now it's cleared the previously installed one
+        assertThat(ViewPump.get())
+                .isNotSameAs(first);
     }
 }
