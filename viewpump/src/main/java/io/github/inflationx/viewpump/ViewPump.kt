@@ -162,10 +162,10 @@ class ViewPump private constructor(
       return INSTANCE ?: builder().build().also { INSTANCE = it }
     }
 
-    @Deprecated("This no longer works!")
+    @Deprecated("This no longer works!", level = DeprecationLevel.ERROR)
     @JvmStatic
     fun create(context: Context, clazz: Class<out View>): View? {
-      error("This no longer works!")
+      error("This no longer works, use the overload that takes an AttributeSet!")
     }
 
     /**
