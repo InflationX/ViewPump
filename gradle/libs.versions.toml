@@ -1,6 +1,5 @@
 [versions]
 agp = "7.4.2"
-butterknife = "10.2.3"
 dokka = "1.8.10"
 jdk = "19"
 kotlin = "1.8.10"
@@ -20,8 +19,6 @@ androidx-annotation="androidx.annotation:annotation:1.6.0"
 androidx-appcompat="androidx.appcompat:appcompat:1.6.1"
 androidx-test-runner="androidx.test:runner:1.5.2"
 assertj="org.assertj:assertj-core:3.24.2"
-butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterknife" }
-butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
 junit="junit:junit:4.13.2"
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
 mockito="org.mockito:mockito-core:4.11.0"

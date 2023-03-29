@@ -22,11 +22,11 @@ android {
         debug {
             matchingFallbacks = ['release']
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
         }
     }
 
@@ -40,9 +40,6 @@ android {
 dependencies {
     implementation project(':viewpump')
     implementation libs.androidx.appcompat
-
-    implementation libs.butterknife
-    annotationProcessor libs.butterknife.compiler
 
     debugImplementation libs.leakcanary.android
 }
