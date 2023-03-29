@@ -24,6 +24,7 @@ tasks.withType(DokkaTask.class).configureEach {
 
 android {
     compileSdk 33
+    namespace = "io.github.inflationx.viewpump"
 
     defaultConfig {
         minSdk 14

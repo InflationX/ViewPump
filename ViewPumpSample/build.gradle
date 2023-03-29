@@ -4,6 +4,7 @@ plugins {
 
 android {
     compileSdk 33
+    namespace = "io.github.inflationx.viewpump.sample"
 
     defaultConfig {
         minSdkVersion 14
