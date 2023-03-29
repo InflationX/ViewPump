@@ -1,12 +1,13 @@
-apply plugin: 'com.android.application'
+plugins {
+    alias(libs.plugins.agp.application)
+}
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdk 33
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 33
         versionCode 1
         versionName "1"
     }
@@ -31,18 +32,17 @@ android {
     lintOptions {
         // we don't need to be indexed by firebase and we don't have a custom icon for our sample app
         disable 'GoogleAppIndexingWarning', 'MissingApplicationIcon'
-        textOutput 'stdout'
         textReport System.getenv('CI') == 'true'
     }
 }
 
 dependencies {
     implementation project(':viewpump')
-    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation libs.androidx.appcompat
 
-    implementation 'com.jakewharton:butterknife:10.0.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
+    implementation libs.butterknife
+    annotationProcessor libs.butterknife.compiler
 
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.2'
-    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.2'
+    debugImplementation libs.leakcanary.android
+    releaseImplementation libs.leakcanary.android.noop
 }
