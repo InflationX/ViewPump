@@ -19,11 +19,18 @@ import kotlin.LazyThreadSafetyMode.NONE
  *
  * @param base ContextBase to Wrap
  */
-class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper(base) {
+class ViewPumpContextWrapper private constructor(
+  base: Context,
+  private val viewPump: ViewPump,
+) : ContextWrapper(base) {
 
   private val inflater: `-ViewPumpLayoutInflater` by lazy(NONE) {
     `-ViewPumpLayoutInflater`(
-        LayoutInflater.from(baseContext), this, false)
+      viewPump = viewPump,
+      original = LayoutInflater.from(baseContext),
+      newContext = this,
+      cloned = false
+    )
   }
 
   override fun getSystemService(name: String): Any? {
@@ -45,8 +52,8 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
      * @return ContextWrapper to pass back to the activity.
      */
     @JvmStatic
-    fun wrap(base: Context): ContextWrapper {
-      return ViewPumpContextWrapper(base)
+    fun wrap(base: Context, viewPump: ViewPump): ContextWrapper {
+      return ViewPumpContextWrapper(base, viewPump)
     }
 
     /**

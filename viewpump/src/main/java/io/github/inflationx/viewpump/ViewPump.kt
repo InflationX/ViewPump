@@ -37,6 +37,24 @@ class ViewPump private constructor(
     return chain.proceed(originalRequest)
   }
 
+  /**
+   * Allows for programmatic creation of Views via reflection on class name that are still
+   * pre/post-processed by the inflation interceptors.
+   *
+   * @param context The context.
+   * @param clazz The class of View to be created.
+   * @return The processed view, which might not necessarily be the same type as clazz.
+   */
+  fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
+    return inflate(InflateRequest(
+        context = context,
+        name = clazz.name,
+        attrs = attrs,
+        fallbackViewCreator = reflectiveFallbackViewCreator
+      ))
+      .view
+  }
+
   class Builder internal constructor() {
 
     /** List of interceptors. */
@@ -144,54 +162,9 @@ class ViewPump private constructor(
 
   companion object {
 
-    private var INSTANCE: ViewPump? = null
-
     /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API.  */
     private val reflectiveFallbackViewCreator: FallbackViewCreator by lazy {
       `-ReflectiveFallbackViewCreator`()
-    }
-
-    @JvmStatic
-    fun init(viewPump: ViewPump) {
-      INSTANCE = viewPump
-    }
-
-    /** Resets the current singleton instance. This should usually only be used for testing. */
-    @JvmStatic
-    fun reset() {
-      INSTANCE = null
-    }
-
-    @JvmStatic
-    @MainThread
-    fun get(): ViewPump {
-      return INSTANCE ?: builder().build().also { INSTANCE = it }
-    }
-
-    @Deprecated("This no longer works!", level = DeprecationLevel.ERROR)
-    @JvmStatic
-    fun create(context: Context, clazz: Class<out View>): View? {
-      error("This no longer works, use the overload that takes an AttributeSet!")
-    }
-
-    /**
-     * Allows for programmatic creation of Views via reflection on class name that are still
-     * pre/post-processed by the inflation interceptors.
-     *
-     * @param context The context.
-     * @param clazz The class of View to be created.
-     * @return The processed view, which might not necessarily be the same type as clazz.
-     */
-    @JvmStatic
-    fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
-      return get()
-          .inflate(InflateRequest(
-              context = context,
-              name = clazz.name,
-              attrs = attrs,
-              fallbackViewCreator = reflectiveFallbackViewCreator
-          ))
-          .view
     }
 
     @JvmStatic

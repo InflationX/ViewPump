@@ -3,6 +3,12 @@ package io.github.inflationx.viewpump.test;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
+
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import io.github.inflationx.viewpump.FallbackViewCreator;
 import io.github.inflationx.viewpump.InflateRequest;
 import io.github.inflationx.viewpump.InflateResult;
@@ -15,12 +21,6 @@ import io.github.inflationx.viewpump.util.SingleConstructorTestView;
 import io.github.inflationx.viewpump.util.TestFallbackViewCreator;
 import io.github.inflationx.viewpump.util.TestPostInflationInterceptor;
 import io.github.inflationx.viewpump.util.TestView;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
@@ -41,29 +41,13 @@ public class ViewPumpTest {
         MockitoAnnotations.openMocks(this);
     }
 
-    @After
-    public void tearDown() {
-        ViewPump.reset();
-    }
-
-    @Test
-    public void uninitViewPump_shouldProvideDefaultInstance() {
-        assertThat(ViewPump.get()).isNotNull();
-    }
-
-    @Test
-    public void initViewPump_shouldProvideConfiguredInstance() {
-        ViewPump viewPump = ViewPump.builder().build();
-        ViewPump.init(viewPump);
-
-        assertThat(ViewPump.get())
-                .isNotNull()
-                .isSameAs(viewPump);
+    private ViewPump testPump() {
+        return ViewPump.builder().build();
     }
 
     @Test
     public void request_withRequiredParams_shouldReturnView() {
-        InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
+        InflateResult result = testPump().inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
                 .attrs(mockAttrs)
@@ -80,7 +64,7 @@ public class ViewPumpTest {
 
     @Test
     public void request_withAdditionalParams_shouldReturnView() {
-        InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
+        InflateResult result = testPump().inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
                 .attrs(mockAttrs)
@@ -98,11 +82,11 @@ public class ViewPumpTest {
 
     @Test
     public void request_withInflatedNameChangeInterceptor_shouldReturnViewWithNewName() {
-        ViewPump.init(ViewPump.builder()
+        ViewPump pump = ViewPump.builder()
                 .addInterceptor(new NameChangingPreInflationInterceptor())
-                .build());
+                .build();
 
-        InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
+        InflateResult result = pump.inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
                 .attrs(mockAttrs)
@@ -118,13 +102,13 @@ public class ViewPumpTest {
 
     @Test
     public void request_withViewNewingInterceptor_shouldReturnViewWithoutFallingBack() {
-        ViewPump.init(ViewPump.builder()
+        ViewPump pump = ViewPump.builder()
                 .addInterceptor(new AnotherTestViewNewingPreInflationInterceptor())
-                .build());
+                .build();
 
         FallbackViewCreator mockFallbackViewCreator = mock(FallbackViewCreator.class);
 
-        InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
+        InflateResult result = pump.inflate(InflateRequest.builder()
                 .name(AnotherTestView.NAME)
                 .context(mockContext)
                 .attrs(mockAttrs)
@@ -144,14 +128,14 @@ public class ViewPumpTest {
     public void request_withViewNewingInterceptor_shouldShortcircuitDownstreamInterceptorsAndFallback() {
         Interceptor starvedInterceptor = mock(Interceptor.class);
 
-        ViewPump.init(ViewPump.builder()
+        ViewPump pump = ViewPump.builder()
                 .addInterceptor(new AnotherTestViewNewingPreInflationInterceptor())
                 .addInterceptor(starvedInterceptor)
-                .build());
+                .build();
 
         FallbackViewCreator mockFallbackViewCreator = mock(FallbackViewCreator.class);
 
-        InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
+        InflateResult result = pump.inflate(InflateRequest.builder()
                 .name(AnotherTestView.NAME)
                 .context(mockContext)
                 .attrs(mockAttrs)
@@ -170,14 +154,14 @@ public class ViewPumpTest {
 
     @Test
     public void request_withNameChangingAndViewNewingInterceptorInOrder_shouldReturnViewWithNewNameWithoutFallback() {
-        ViewPump.init(ViewPump.builder()
+        ViewPump pump = ViewPump.builder()
                 .addInterceptor(new NameChangingPreInflationInterceptor())
                 .addInterceptor(new AnotherTestViewNewingPreInflationInterceptor())
-                .build());
+                .build();
 
         FallbackViewCreator mockFallbackViewCreator = mock(FallbackViewCreator.class);
 
-        InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
+        InflateResult result = pump.inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
                 .attrs(mockAttrs)
@@ -195,10 +179,10 @@ public class ViewPumpTest {
 
     @Test
     public void request_withNameChangingAndViewNewingInterceptorWrongOrder_shouldReturnViewWithNewNameWithFallback() {
-        ViewPump.init(ViewPump.builder()
+        ViewPump pump = ViewPump.builder()
                 .addInterceptor(new AnotherTestViewNewingPreInflationInterceptor())
                 .addInterceptor(new NameChangingPreInflationInterceptor())
-                .build());
+                .build();
 
         View fallbackView = new AnotherTestView(mockContext);
         FallbackViewCreator mockFallbackViewCreator = mock(FallbackViewCreator.class);
@@ -209,7 +193,7 @@ public class ViewPumpTest {
                     nullable(AttributeSet.class)))
                 .thenReturn(fallbackView);
 
-        InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
+        InflateResult result = pump.inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
                 .attrs(mockAttrs)
@@ -229,7 +213,7 @@ public class ViewPumpTest {
 
     @Test
     public void createView_fromClassName_shouldReturnView() {
-        View view = ViewPump.create(mockContext, TestView.class, mockAttrs);
+        View view = testPump().create(mockContext, TestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
@@ -240,7 +224,7 @@ public class ViewPumpTest {
 
     @Test
     public void createView_fromClassNameWithSingleParamConstructor_shouldReturnView() {
-        View view = ViewPump.create(mockContext, SingleConstructorTestView.class, mockAttrs);
+        View view = testPump().create(mockContext, SingleConstructorTestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
@@ -251,11 +235,11 @@ public class ViewPumpTest {
 
     @Test
     public void createView_withPreInflationInterceptor_shouldReturnViewWithNewName() {
-        ViewPump.init(ViewPump.builder()
+        ViewPump pump = ViewPump.builder()
                 .addInterceptor(new NameChangingPreInflationInterceptor())
-                .build());
+                .build();
 
-        View view = ViewPump.create(mockContext, TestView.class, mockAttrs);
+        View view = pump.create(mockContext, TestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
@@ -266,11 +250,11 @@ public class ViewPumpTest {
 
     @Test
     public void createView_withPostInflationInterceptor_shouldReturnPostProcessedView() {
-        ViewPump.init(ViewPump.builder()
+        ViewPump pump = ViewPump.builder()
                 .addInterceptor(new TestPostInflationInterceptor())
-                .build());
+                .build();
 
-        View view = ViewPump.create(mockContext, TestView.class, mockAttrs);
+        View view = pump.create(mockContext, TestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
@@ -278,23 +262,5 @@ public class ViewPumpTest {
 
         assertThat(((TestView) view).isSameContextAs(mockContext)).isTrue();
         assertThat(((TestView) view).isPostProcessed()).isTrue();
-    }
-
-    @Test
-    public void reset() {
-        ViewPump first = ViewPump.builder()
-                .addInterceptor(new TestPostInflationInterceptor())
-                .build();
-        ViewPump.init(first);
-
-        assertThat(ViewPump.get())
-                .isSameAs(first);
-
-        // Now reset
-        ViewPump.reset();
-
-        // Now it's cleared the previously installed one
-        assertThat(ViewPump.get())
-                .isNotSameAs(first);
     }
 }

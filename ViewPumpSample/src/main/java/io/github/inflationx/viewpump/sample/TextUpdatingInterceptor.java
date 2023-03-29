@@ -28,9 +28,7 @@ public class TextUpdatingInterceptor implements Interceptor {
                     textView.setText(textView.getContext().getString(R.string.custom_textview_prefixed_text, text));
                 }
             } finally {
-                if (a != null) {
-                    a.recycle();
-                }
+                a.recycle();
             }
         }
         return result;

@@ -5,10 +5,16 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import io.github.inflationx.viewpump.ViewPump;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private final ViewPump pump = ViewPump.builder()
+            .addInterceptor(new TextUpdatingInterceptor())
+            .addInterceptor(new CustomTextViewInterceptor())
+            .build();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +36,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, pump));
     }
 }
