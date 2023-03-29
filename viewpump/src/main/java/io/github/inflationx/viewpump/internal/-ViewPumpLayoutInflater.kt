@@ -39,6 +39,10 @@ internal class `-ViewPumpLayoutInflater`(
   }
 
   override fun cloneInContext(newContext: Context): LayoutInflater {
+    if (newContext == context) {
+      // Same context, use the same inflater
+      return this
+    }
     return `-ViewPumpLayoutInflater`(this, newContext, true)
   }
 
