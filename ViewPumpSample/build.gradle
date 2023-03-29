@@ -45,5 +45,4 @@ dependencies {
     annotationProcessor libs.butterknife.compiler
 
     debugImplementation libs.leakcanary.android
-    releaseImplementation libs.leakcanary.android.noop
 }

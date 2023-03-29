@@ -24,5 +24,4 @@ butterknife = { module = "com.jakewharton:butterknife", version.ref = "butterkni
 butterknife-compiler = { module = "com.jakewharton:butterknife-compiler", version.ref = "butterknife" }
 junit="junit:junit:4.13.2"
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
-leakcanary-android-noop = { module = "com.squareup.leakcanary:leakcanary-android-no-op", version.ref = "leakcanary" }
 mockito="org.mockito:mockito-core:4.11.0"
