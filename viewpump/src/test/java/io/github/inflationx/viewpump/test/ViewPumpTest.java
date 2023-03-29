@@ -39,7 +39,6 @@ public class ViewPumpTest {
     @Before
     public void setup() {
         MockitoAnnotations.openMocks(this);
-        ViewPump.init(null);
     }
 
     @After

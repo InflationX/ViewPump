@@ -152,7 +152,7 @@ class ViewPump private constructor(
     }
 
     @JvmStatic
-    fun init(viewPump: ViewPump?) {
+    fun init(viewPump: ViewPump) {
       INSTANCE = viewPump
     }
 
