@@ -1,6 +1,7 @@
 package io.github.inflationx.viewpump
 
 import android.content.Context
+import android.util.AttributeSet
 import android.view.View
 import androidx.annotation.MainThread
 import io.github.inflationx.viewpump.Interceptor.Chain
@@ -161,6 +162,12 @@ class ViewPump private constructor(
       return INSTANCE ?: builder().build().also { INSTANCE = it }
     }
 
+    @Deprecated("This no longer works!")
+    @JvmStatic
+    fun create(context: Context, clazz: Class<out View>): View? {
+      error("This no longer works!")
+    }
+
     /**
      * Allows for programmatic creation of Views via reflection on class name that are still
      * pre/post-processed by the inflation interceptors.
@@ -170,11 +177,12 @@ class ViewPump private constructor(
      * @return The processed view, which might not necessarily be the same type as clazz.
      */
     @JvmStatic
-    fun create(context: Context, clazz: Class<out View>): View? {
+    fun create(context: Context, clazz: Class<out View>, attrs :AttributeSet): View? {
       return get()
           .inflate(InflateRequest(
               context = context,
               name = clazz.name,
+              attrs = attrs,
               fallbackViewCreator = reflectiveFallbackViewCreator
           ))
           .view

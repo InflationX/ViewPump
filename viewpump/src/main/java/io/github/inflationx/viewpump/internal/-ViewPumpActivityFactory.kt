@@ -35,5 +35,5 @@ internal interface `-ViewPumpActivityFactory` {
    * @see android.view.LayoutInflater.Factory2
    */
   fun onActivityCreateView(parent: View?, view: View, name: String, context: Context,
-      attrs: AttributeSet?): View?
+      attrs: AttributeSet): View?
 }
