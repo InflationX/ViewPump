@@ -7,6 +7,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.os.BuildCompat
 import io.github.inflationx.viewpump.FallbackViewCreator
 import io.github.inflationx.viewpump.InflateRequest
@@ -22,7 +23,8 @@ internal class `-ViewPumpLayoutInflater`(
     cloned: Boolean
 ) : LayoutInflater(original, newContext), `-ViewPumpActivityFactory` {
 
-  private val IS_AT_LEAST_Q = Build.VERSION.SDK_INT > Build.VERSION_CODES.P || BuildCompat.isAtLeastQ()
+  @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.Q)
+  private val isAtLeastQ = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q
 
   private val nameAndAttrsViewCreator: FallbackViewCreator = NameAndAttrsViewCreator(this)
   private val parentAndNameAndAttrsViewCreator: FallbackViewCreator = ParentAndNameAndAttrsViewCreator(this)
@@ -127,7 +129,7 @@ internal class `-ViewPumpLayoutInflater`(
       view: View,
       name: String,
       context: Context,
-      attrs: AttributeSet?
+      attrs: AttributeSet
   ): View? {
     return ViewPump.get()
         .inflate(InflateRequest(
@@ -146,7 +148,7 @@ internal class `-ViewPumpLayoutInflater`(
    * BUT only for none CustomViews.
    */
   @Throws(ClassNotFoundException::class)
-  override fun onCreateView(parent: View?, name: String, attrs: AttributeSet?): View? {
+  override fun onCreateView(parent: View?, name: String, attrs: AttributeSet): View? {
     return ViewPump.get()
         .inflate(InflateRequest(
             name = name,
@@ -164,7 +166,7 @@ internal class `-ViewPumpLayoutInflater`(
    * Basically if this method doesn't inflate the View nothing probably will.
    */
   @Throws(ClassNotFoundException::class)
-  override fun onCreateView(name: String, attrs: AttributeSet?): View? {
+  override fun onCreateView(name: String, attrs: AttributeSet): View? {
     return ViewPump.get()
         .inflate(InflateRequest(
             name = name,
@@ -205,7 +207,7 @@ internal class `-ViewPumpLayoutInflater`(
     // If CustomViewCreation is off skip this.
     if (!ViewPump.get().isCustomViewCreation) return mutableView
     if (mutableView == null && name.indexOf('.') > -1) {
-      if (IS_AT_LEAST_Q) {
+      if (isAtLeastQ) {
         mutableView = cloneInContext(viewContext).createView(name, null, attrs)
       } else {
         @Suppress("UNCHECKED_CAST")
@@ -257,7 +259,7 @@ internal class `-ViewPumpLayoutInflater`(
         parent: View?,
         name: String,
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet
     ): View? {
       return inflater.createCustomViewInternal(view, name, context, attrs)
     }
@@ -267,7 +269,7 @@ internal class `-ViewPumpLayoutInflater`(
       private val inflater: `-ViewPumpLayoutInflater`) : FallbackViewCreator {
 
     override fun onCreateView(parent: View?, name: String, context: Context,
-        attrs: AttributeSet?): View? {
+        attrs: AttributeSet): View? {
       return inflater.superOnCreateView(parent, name, attrs)
     }
   }
@@ -280,7 +282,7 @@ internal class `-ViewPumpLayoutInflater`(
         parent: View?,
         name: String,
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet
     ): View? {
       // This mimics the {@code PhoneLayoutInflater} in the way it tries to inflate the base
       // classes, if this fails its pretty certain the app will fail at this point.
@@ -312,7 +314,7 @@ internal class `-ViewPumpLayoutInflater`(
 
     private val viewCreator: FallbackViewCreator = WrapperFactoryViewCreator(factory)
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet?): View? {
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
       return ViewPump.get()
           .inflate(InflateRequest(
               name = name,
@@ -332,7 +334,7 @@ internal class `-ViewPumpLayoutInflater`(
         parent: View?,
         name: String,
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet
     ): View? {
       return factory.onCreateView(name, context, attrs)
     }
@@ -344,7 +346,7 @@ internal class `-ViewPumpLayoutInflater`(
   private open class WrapperFactory2(factory2: LayoutInflater.Factory2) : LayoutInflater.Factory2 {
     private val viewCreator = WrapperFactory2ViewCreator(factory2)
 
-    override fun onCreateView(name: String, context: Context, attrs: AttributeSet?): View? {
+    override fun onCreateView(name: String, context: Context, attrs: AttributeSet): View? {
       return onCreateView(null, name, context, attrs)
     }
 
@@ -352,7 +354,7 @@ internal class `-ViewPumpLayoutInflater`(
         parent: View?,
         name: String,
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet
     ): View? {
       return ViewPump.get()
           .inflate(InflateRequest(
@@ -373,7 +375,7 @@ internal class `-ViewPumpLayoutInflater`(
         parent: View?,
         name: String,
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet
     ): View? {
       return factory2.onCreateView(parent, name, context, attrs)
     }
@@ -393,7 +395,7 @@ internal class `-ViewPumpLayoutInflater`(
         parent: View?,
         name: String,
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet
     ): View? {
       return ViewPump.get()
           .inflate(InflateRequest(
@@ -416,7 +418,7 @@ internal class `-ViewPumpLayoutInflater`(
         parent: View?,
         name: String,
         context: Context,
-        attrs: AttributeSet?
+        attrs: AttributeSet
     ): View? {
       return inflater.createCustomViewInternal(
           factory2.onCreateView(parent, name, context, attrs), name, context, attrs)

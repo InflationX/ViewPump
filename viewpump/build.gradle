@@ -1,60 +1,70 @@
-apply plugin: 'com.android.library'
-apply plugin: 'org.jetbrains.kotlin.android'
-apply plugin: 'org.jetbrains.dokka-android'
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-dokka {
-    reportUndocumented = false
-    skipDeprecated = true
-    jdkVersion = 7
+plugins {
+    alias(libs.plugins.agp.library)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.dokka)
+    alias(libs.plugins.mavenPublish)
+}
+
+tasks.withType(DokkaTask.class).configureEach {
+    dokkaSourceSets.configureEach {
+        reportUndocumented = false
+        skipDeprecated = true
+        packageOptions {
+            prefix = "io.github.inflationx.viewpump.internal"
+            suppress = true
+        }
+        // AndroidX and Android docs are automatically added by the Dokka plugin.
+    }
     includes = ['Module.md']
-    packageOptions {
-        prefix = "io.github.inflationx.viewpump.internal"
-        suppress = true
-    }
-    externalDocumentationLink {
-        url = new URL("https://developer.android.com/reference/")
-        packageListUrl =
-            new URL("https://developer.android.com/reference/androidx/package-list")
-    }
 }
 
 android {
-    compileSdkVersion 28
-    buildToolsVersion "28.0.3"
+    compileSdk 33
+    namespace = "io.github.inflationx.viewpump"
 
     defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 28
+        minSdk 14
     }
-    lintOptions {
+
+    lint {
         // we don't always want to use the latest version of the support library
         disable 'GradleDependency'
-        textOutput 'stdout'
         textReport System.getenv('CI') == 'true'
     }
-    libraryVariants.all {
-        // TODO replace with https://issuetracker.google.com/issues/72050365 once released.
-        it.generateBuildConfigProvider.configure {
-            it.enabled = false
-        }
+
+    buildFeatures {
+        buildConfig = false
     }
-    variantFilter { variant ->
-        if (variant.buildType.name == 'debug') {
-            variant.setIgnore(true)
-        }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+androidComponents {
+    beforeVariants(selector().all()) { variant ->
+        variant.enabled = variant.buildType == 'release'
+    }
+}
+
+tasks.withType(KotlinCompile.class).configureEach {
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_1_8
     }
 }
 
 dependencies {
-    compileOnly 'androidx.appcompat:appcompat:1.0.2'
-    api 'org.jetbrains.kotlin:kotlin-stdlib:1.3.21'
+    compileOnly libs.androidx.appcompat
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'org.assertj:assertj-core:3.11.0'
-    testImplementation 'org.mockito:mockito-core:2.23.0'
+    testImplementation libs.junit
+    testImplementation libs.assertj
+    testImplementation libs.mockito
 
-    testImplementation 'androidx.annotation:annotation:1.0.2'
-    testImplementation 'androidx.test:runner:1.1.1'
+    testImplementation libs.androidx.annotation
+    testImplementation libs.androidx.test.runner
 }
-
-apply plugin: 'com.vanniktech.maven.publish'

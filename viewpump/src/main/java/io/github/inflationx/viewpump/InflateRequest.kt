@@ -10,7 +10,7 @@ data class InflateRequest(
     @get:JvmName("context")
     val context: Context,
     @get:JvmName("attrs")
-    val attrs: AttributeSet? = null,
+    val attrs: AttributeSet,
     @get:JvmName("parent")
     val parent: View? = null,
     @get:JvmName("fallbackViewCreator")
@@ -61,7 +61,7 @@ data class InflateRequest(
     fun build() =
         InflateRequest(name = name ?: throw IllegalStateException("name == null"),
             context = context ?: throw IllegalStateException("context == null"),
-            attrs = attrs,
+            attrs = attrs ?: throw IllegalStateException("attrs == null"),
             parent = parent,
             fallbackViewCreator = fallbackViewCreator ?: throw IllegalStateException("fallbackViewCreator == null")
         )

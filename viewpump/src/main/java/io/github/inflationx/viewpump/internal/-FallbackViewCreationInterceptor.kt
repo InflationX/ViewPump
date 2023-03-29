@@ -12,7 +12,8 @@ internal class `-FallbackViewCreationInterceptor` : Interceptor {
     val request = chain.request()
     val viewCreator = request.fallbackViewCreator
     val fallbackView = viewCreator.onCreateView(request.parent, request.name, request.context,
-        request.attrs)
+        checkNotNull(request.attrs)
+    )
 
     return InflateResult(
         view = fallbackView,

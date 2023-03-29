@@ -17,7 +17,7 @@ internal class `-ReflectiveFallbackViewCreator` : FallbackViewCreator {
   }
 
   override fun onCreateView(parent: View?, name: String, context: Context,
-      attrs: AttributeSet?): View? {
+      attrs: AttributeSet): View? {
     try {
       val clazz = Class.forName(name).asSubclass(View::class.java)
       var constructor: Constructor<out View>

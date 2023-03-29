@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  # Only run push on main
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**/*.md'
+  # Always run on PRs
+  pull_request:
+    branches: [ main ]
+  merge_group:
+
+concurrency:
+  group: 'ci-${{ github.head_ref }}-${{ github.workflow }}'
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Gradle Wrapper Validation
+        uses: gradle/wrapper-validation-action@v1
+
+      - name: Install JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '19'
+
+      - name: Build and run tests
+        id: gradle
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: check
+          gradle-home-cache-cleanup: true
+          cache-read-only: false
+
+      - name: (Fail-only) Upload build reports
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: reports
+          path: |
+            **/build/reports/**
+
+      - name: Publish snapshot (main branch only)
+        if: github.repository == 'inflationx/viewpump' && github.ref == 'refs/heads/main'
+        run: ./gradlew publish -PmavenCentralUsername=${{ secrets.SONATYPEUSERNAME }} -PmavenCentralPassword=${{ secrets.SONATYPEPASSWORD }} --no-configuration-cache

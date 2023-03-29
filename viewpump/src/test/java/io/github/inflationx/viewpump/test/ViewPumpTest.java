@@ -21,11 +21,11 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
-import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 public class ViewPumpTest {
@@ -36,7 +36,7 @@ public class ViewPumpTest {
 
     @Before
     public void setup() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         ViewPump.init(null);
     }
 
@@ -60,6 +60,7 @@ public class ViewPumpTest {
         InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
+                .attrs(mockAttrs)
                 .fallbackViewCreator(new TestFallbackViewCreator())
                 .build());
 
@@ -98,6 +99,7 @@ public class ViewPumpTest {
         InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
+                .attrs(mockAttrs)
                 .fallbackViewCreator(new TestFallbackViewCreator())
                 .build());
 
@@ -119,10 +121,11 @@ public class ViewPumpTest {
         InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
                 .name(AnotherTestView.NAME)
                 .context(mockContext)
+                .attrs(mockAttrs)
                 .fallbackViewCreator(mockFallbackViewCreator)
                 .build());
 
-        verifyZeroInteractions(mockFallbackViewCreator);
+        verifyNoInteractions(mockFallbackViewCreator);
 
         assertThat(result).isNotNull();
         assertThat(result.name()).isEqualTo(AnotherTestView.NAME);
@@ -145,11 +148,12 @@ public class ViewPumpTest {
         InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
                 .name(AnotherTestView.NAME)
                 .context(mockContext)
+                .attrs(mockAttrs)
                 .fallbackViewCreator(mockFallbackViewCreator)
                 .build());
 
-        verifyZeroInteractions(starvedInterceptor);
-        verifyZeroInteractions(mockFallbackViewCreator);
+        verifyNoInteractions(starvedInterceptor);
+        verifyNoInteractions(mockFallbackViewCreator);
 
         assertThat(result).isNotNull();
         assertThat(result.name()).isEqualTo(AnotherTestView.NAME);
@@ -170,10 +174,11 @@ public class ViewPumpTest {
         InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
+                .attrs(mockAttrs)
                 .fallbackViewCreator(mockFallbackViewCreator)
                 .build());
 
-        verifyZeroInteractions(mockFallbackViewCreator);
+        verifyNoInteractions(mockFallbackViewCreator);
 
         assertThat(result).isNotNull();
         assertThat(result.name()).isEqualTo(AnotherTestView.NAME);
@@ -201,6 +206,7 @@ public class ViewPumpTest {
         InflateResult result = ViewPump.get().inflate(InflateRequest.builder()
                 .name(TestView.NAME)
                 .context(mockContext)
+                .attrs(mockAttrs)
                 .fallbackViewCreator(mockFallbackViewCreator)
                 .build());
 
@@ -217,7 +223,7 @@ public class ViewPumpTest {
 
     @Test
     public void createView_fromClassName_shouldReturnView() {
-        View view = ViewPump.create(mockContext, TestView.class);
+        View view = ViewPump.create(mockContext, TestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
@@ -228,7 +234,7 @@ public class ViewPumpTest {
 
     @Test
     public void createView_fromClassNameWithSingleParamConstructor_shouldReturnView() {
-        View view = ViewPump.create(mockContext, SingleConstructorTestView.class);
+        View view = ViewPump.create(mockContext, SingleConstructorTestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
@@ -243,7 +249,7 @@ public class ViewPumpTest {
                 .addInterceptor(new NameChangingPreInflationInterceptor())
                 .build());
 
-        View view = ViewPump.create(mockContext, TestView.class);
+        View view = ViewPump.create(mockContext, TestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
@@ -258,7 +264,7 @@ public class ViewPumpTest {
                 .addInterceptor(new TestPostInflationInterceptor())
                 .build());
 
-        View view = ViewPump.create(mockContext, TestView.class);
+        View view = ViewPump.create(mockContext, TestView.class, mockAttrs);
 
         assertThat(view)
                 .isNotNull()
