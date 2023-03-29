@@ -156,6 +156,12 @@ class ViewPump private constructor(
       INSTANCE = viewPump
     }
 
+    /** Resets the current singleton instance. This should usually only be used for testing. */
+    @JvmStatic
+    fun reset() {
+      INSTANCE = null
+    }
+
     @JvmStatic
     @MainThread
     fun get(): ViewPump {
@@ -177,7 +183,7 @@ class ViewPump private constructor(
      * @return The processed view, which might not necessarily be the same type as clazz.
      */
     @JvmStatic
-    fun create(context: Context, clazz: Class<out View>, attrs :AttributeSet): View? {
+    fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
       return get()
           .inflate(InflateRequest(
               context = context,
