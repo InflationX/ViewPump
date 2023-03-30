@@ -50,4 +50,4 @@ jobs:
 
       - name: Publish snapshot (main branch only)
         if: github.repository == 'inflationx/viewpump' && github.ref == 'refs/heads/main'
-        run: ./gradlew publish -PmavenCentralUsername=${{ secrets.SONATYPEUSERNAME }} -PmavenCentralPassword=${{ secrets.SONATYPEPASSWORD }} --no-configuration-cache
+        run: ./gradlew publish -PmavenCentralUsername=${{ secrets.SONATYPE_USERNAME }} -PmavenCentralPassword=${{ secrets.SONATYPE_PASSWORD }} --no-configuration-cache
