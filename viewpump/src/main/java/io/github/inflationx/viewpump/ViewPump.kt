@@ -3,7 +3,6 @@ package io.github.inflationx.viewpump
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.MainThread
 import io.github.inflationx.viewpump.Interceptor.Chain
 import io.github.inflationx.viewpump.ViewPump.Builder
 import io.github.inflationx.viewpump.internal.`-FallbackViewCreationInterceptor`
@@ -162,9 +161,59 @@ class ViewPump private constructor(
 
   companion object {
 
+    private var INSTANCE: ViewPump? = null
+
     /** A FallbackViewCreator used to instantiate a view via reflection when using the create() API.  */
     private val reflectiveFallbackViewCreator: FallbackViewCreator by lazy {
       `-ReflectiveFallbackViewCreator`()
+    }
+
+    @Deprecated(
+      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      level = DeprecationLevel.ERROR
+    )
+    @JvmStatic
+    fun init(viewPump: ViewPump) {
+      INSTANCE = viewPump
+    }
+
+    @Deprecated(
+      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      level = DeprecationLevel.ERROR
+    )
+    @JvmStatic
+    fun get(): ViewPump {
+      return INSTANCE ?: builder().build().also { INSTANCE = it }
+    }
+
+    @Deprecated(
+      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      level = DeprecationLevel.ERROR
+    )
+    @JvmStatic
+    fun reset() {
+      INSTANCE = null
+    }
+
+    @Deprecated("This no longer works!", level = DeprecationLevel.ERROR)
+    @JvmStatic
+    fun create(context: Context, clazz: Class<out View>): View? {
+      error("This no longer works, use the overload that takes an AttributeSet!")
+    }
+
+    @Deprecated("Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.")
+    @JvmName("staticCreateDeprecated")
+    @JvmStatic
+    fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
+      @Suppress("DEPRECATION_ERROR")
+      return get()
+        .inflate(InflateRequest(
+          context = context,
+          name = clazz.name,
+          attrs = attrs,
+          fallbackViewCreator = reflectiveFallbackViewCreator
+        ))
+        .view
     }
 
     @JvmStatic

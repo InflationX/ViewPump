@@ -4,10 +4,11 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import io.github.inflationx.viewpump.FallbackViewCreator;
 import io.github.inflationx.viewpump.InflateRequest;
@@ -29,20 +30,36 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import static org.mockito.quality.Strictness.STRICT_STUBS;
 
 public class ViewPumpTest {
+
+    @Rule
+    public MockitoRule initRule = MockitoJUnit.rule().strictness(STRICT_STUBS);
 
     @Mock Context mockContext;
     @Mock AttributeSet mockAttrs;
     @Mock View mockParentView;
 
-    @Before
-    public void setup() {
-        MockitoAnnotations.openMocks(this);
-    }
-
     private ViewPump testPump() {
         return ViewPump.builder().build();
+    }
+
+    /** @noinspection deprecation*/
+    @Test
+    public void uninitViewPump_shouldProvideDefaultInstance() {
+        assertThat(ViewPump.get()).isNotNull();
+    }
+
+    /** @noinspection deprecation*/
+    @Test
+    public void initViewPump_shouldProvideConfiguredInstance() {
+        ViewPump viewPump = ViewPump.builder().build();
+        ViewPump.init(viewPump);
+
+        assertThat(ViewPump.get())
+                .isNotNull()
+                .isSameAs(viewPump);
     }
 
     @Test
@@ -262,5 +279,24 @@ public class ViewPumpTest {
 
         assertThat(((TestView) view).isSameContextAs(mockContext)).isTrue();
         assertThat(((TestView) view).isPostProcessed()).isTrue();
+    }
+
+    /** @noinspection deprecation*/
+    @Test
+    public void reset() {
+        ViewPump first = ViewPump.builder()
+                .addInterceptor(new TestPostInflationInterceptor())
+                .build();
+        ViewPump.init(first);
+
+        assertThat(ViewPump.get())
+                .isSameAs(first);
+
+        // Now reset
+        ViewPump.reset();
+
+        // Now it's cleared the previously installed one
+        assertThat(ViewPump.get())
+                .isNotSameAs(first);
     }
 }
