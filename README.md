@@ -3,7 +3,7 @@ ViewPump
 
 View inflation you can intercept.
 
-ViewPump installs a custom LayoutInflater via a ContextThemeWrapper and provides an API of pre/post-inflation interceptors.
+ViewPump installs a custom `LayoutInflater` via a `ContextThemeWrapper` and provides an API of pre/post-inflation interceptors.
 
 ## Getting started
 
@@ -59,32 +59,25 @@ public class CustomTextViewInterceptor implements Interceptor {
 }
 ```
 
-### Installation
+## Installation
 
-Add your interceptors to the `ViewPump.builder()`, in your `Application` class in the `#onCreate()` method and `init` the `ViewPump`. The order of the interceptors is important since they form the interceptor chain of requests and results.
+Create a `ViewPump` instance via `ViewPump.builder()` and add your interceptors. The order of the interceptors is important since they form the interceptor chain of requests and results.
 
 An interceptor may choose to return a programmatically instantiated view rather than letting the default inflation occur, in which case interceptors added after it will be skipped. For this reason, it is better to add your post-inflation interceptors before the pre-inflation interceptors
 
 ```java
-@Override
-public void onCreate() {
-    super.onCreate();
-    ViewPump.init(ViewPump.builder()
-                .addInterceptor(new TextUpdatingInterceptor())
-                .addInterceptor(new CustomTextViewInterceptor())
-                .build());
-    //....
-}
+ViewPump viewPump = ViewPump.builder()
+    .addInterceptor(new TextUpdatingInterceptor())
+    .addInterceptor(new CustomTextViewInterceptor())
+    .build()
 ```
 
-### Inject into Context
-
-Wrap the `Activity` Context:
+Once the instance is created (via dependency injection or otherwise), provide it to your relevant context via wrapping the `Activity` context:
 
 ```java
 @Override
 protected void attachBaseContext(Context newBase) {
-    super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
+    super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, viewPump));
 }
 ```
 

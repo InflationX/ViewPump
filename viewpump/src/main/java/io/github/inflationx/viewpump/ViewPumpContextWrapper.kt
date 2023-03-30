@@ -19,11 +19,18 @@ import kotlin.LazyThreadSafetyMode.NONE
  *
  * @param base ContextBase to Wrap
  */
-class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper(base) {
+class ViewPumpContextWrapper private constructor(
+  base: Context,
+  private val viewPump: ViewPump,
+) : ContextWrapper(base) {
 
   private val inflater: `-ViewPumpLayoutInflater` by lazy(NONE) {
     `-ViewPumpLayoutInflater`(
-        LayoutInflater.from(baseContext), this, false)
+      viewPump = viewPump,
+      original = LayoutInflater.from(baseContext),
+      newContext = this,
+      cloned = false
+    )
   }
 
   override fun getSystemService(name: String): Any? {
@@ -35,6 +42,16 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
 
   companion object {
 
+    @Deprecated(
+      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      ReplaceWith("wrap(base, viewPump)")
+    )
+    @JvmStatic
+    fun wrap(base: Context): ContextWrapper {
+      @Suppress("DEPRECATION_ERROR")
+      return wrap(base, ViewPump.get())
+    }
+
     /**
      * Uses the default configuration from [ViewPump]
      *
@@ -45,8 +62,8 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
      * @return ContextWrapper to pass back to the activity.
      */
     @JvmStatic
-    fun wrap(base: Context): ContextWrapper {
-      return ViewPumpContextWrapper(base)
+    fun wrap(base: Context, viewPump: ViewPump): ContextWrapper {
+      return ViewPumpContextWrapper(base, viewPump)
     }
 
     /**
@@ -80,8 +97,10 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
      * @return The same view passed in, or null if null passed in.
      */
     @JvmStatic
-    fun onActivityCreateView(activity: Activity, parent: View?, view: View, name: String,
-        context: Context, attr: AttributeSet): View? {
+    fun onActivityCreateView(
+      activity: Activity, parent: View?, view: View, name: String,
+      context: Context, attr: AttributeSet,
+    ): View? {
       return get(activity).onActivityCreateView(parent, view, name, context, attr)
     }
 
@@ -95,7 +114,8 @@ class ViewPumpContextWrapper private constructor(base: Context) : ContextWrapper
     internal fun get(activity: Activity): `-ViewPumpActivityFactory` {
       if (activity.layoutInflater !is `-ViewPumpLayoutInflater`) {
         throw RuntimeException(
-            "This activity does not wrap the Base Context! See ViewPumpContextWrapper.wrap(Context)")
+          "This activity does not wrap the Base Context! See ViewPumpContextWrapper.wrap(Context)"
+        )
       }
       return activity.layoutInflater as `-ViewPumpActivityFactory`
     }

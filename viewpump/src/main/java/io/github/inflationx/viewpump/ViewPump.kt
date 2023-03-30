@@ -3,7 +3,6 @@ package io.github.inflationx.viewpump
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import androidx.annotation.MainThread
 import io.github.inflationx.viewpump.Interceptor.Chain
 import io.github.inflationx.viewpump.ViewPump.Builder
 import io.github.inflationx.viewpump.internal.`-FallbackViewCreationInterceptor`
@@ -35,6 +34,24 @@ class ViewPump private constructor(
     val chain = `-InterceptorChain`(interceptorsWithFallback, 0,
         originalRequest)
     return chain.proceed(originalRequest)
+  }
+
+  /**
+   * Allows for programmatic creation of Views via reflection on class name that are still
+   * pre/post-processed by the inflation interceptors.
+   *
+   * @param context The context.
+   * @param clazz The class of View to be created.
+   * @return The processed view, which might not necessarily be the same type as clazz.
+   */
+  fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
+    return inflate(InflateRequest(
+        context = context,
+        name = clazz.name,
+        attrs = attrs,
+        fallbackViewCreator = reflectiveFallbackViewCreator
+      ))
+      .view
   }
 
   class Builder internal constructor() {
@@ -151,21 +168,31 @@ class ViewPump private constructor(
       `-ReflectiveFallbackViewCreator`()
     }
 
+    @Deprecated(
+      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      level = DeprecationLevel.ERROR
+    )
     @JvmStatic
     fun init(viewPump: ViewPump) {
       INSTANCE = viewPump
     }
 
-    /** Resets the current singleton instance. This should usually only be used for testing. */
+    @Deprecated(
+      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      level = DeprecationLevel.ERROR
+    )
+    @JvmStatic
+    fun get(): ViewPump {
+      return INSTANCE ?: builder().build().also { INSTANCE = it }
+    }
+
+    @Deprecated(
+      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      level = DeprecationLevel.ERROR
+    )
     @JvmStatic
     fun reset() {
       INSTANCE = null
-    }
-
-    @JvmStatic
-    @MainThread
-    fun get(): ViewPump {
-      return INSTANCE ?: builder().build().also { INSTANCE = it }
     }
 
     @Deprecated("This no longer works!", level = DeprecationLevel.ERROR)
@@ -174,24 +201,19 @@ class ViewPump private constructor(
       error("This no longer works, use the overload that takes an AttributeSet!")
     }
 
-    /**
-     * Allows for programmatic creation of Views via reflection on class name that are still
-     * pre/post-processed by the inflation interceptors.
-     *
-     * @param context The context.
-     * @param clazz The class of View to be created.
-     * @return The processed view, which might not necessarily be the same type as clazz.
-     */
+    @Deprecated("Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.")
+    @JvmName("staticCreateDeprecated")
     @JvmStatic
     fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
+      @Suppress("DEPRECATION_ERROR")
       return get()
-          .inflate(InflateRequest(
-              context = context,
-              name = clazz.name,
-              attrs = attrs,
-              fallbackViewCreator = reflectiveFallbackViewCreator
-          ))
-          .view
+        .inflate(InflateRequest(
+          context = context,
+          name = clazz.name,
+          attrs = attrs,
+          fallbackViewCreator = reflectiveFallbackViewCreator
+        ))
+        .view
     }
 
     @JvmStatic

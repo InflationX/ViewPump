@@ -22,6 +22,11 @@ tasks.withType(DokkaTask.class).configureEach {
     includes = ['Module.md']
 }
 
+mavenPublishing {
+    publishToMavenCentral("DEFAULT", true)
+    signAllPublications()
+}
+
 android {
     compileSdk 33
     namespace = "io.github.inflationx.viewpump"
