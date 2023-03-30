@@ -1,5 +1,12 @@
 # Changelog
 
+## Version 2.1.0 *(2023-03-30)*
+- Deprecate static `init`, `get`, and related APIs in favor of instance-based use. Instead, install local `ViewPump` instances as needed via `ViewPumpContextWrapper.wrap(context, viewPump)`.
+- Optimize `cloneInContext()` to return the same instance whenever the same context is used.
+- Update to Kotlin `1.8.10`.
+- Update to Android compile SDK 33. Note this is a source breaking change in some places where new nullability annotations on `AttributeSet` are used. These are propagated as needed.
+- Build against `androidx.appcompat:appcompat` to `1.6.1`.
+
 ## Version 2.0.3 *(2019-06-07)*
 - Update the LayoutInflater to be compatible with Android Q
 
