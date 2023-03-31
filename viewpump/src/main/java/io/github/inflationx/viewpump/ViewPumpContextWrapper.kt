@@ -43,8 +43,9 @@ class ViewPumpContextWrapper private constructor(
   companion object {
 
     @Deprecated(
-      "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
-      ReplaceWith("wrap(base, viewPump)")
+      message = "Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.",
+      replaceWith = ReplaceWith("wrap(base, viewPump)"),
+      level = DeprecationLevel.ERROR
     )
     @JvmStatic
     fun wrap(base: Context): ContextWrapper {
