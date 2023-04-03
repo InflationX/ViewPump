@@ -6,6 +6,7 @@
 - Update to Kotlin `1.8.10`.
 - Update to Android compile SDK 33. Note this is a source breaking change in some places where new nullability annotations on `AttributeSet` are used. These are propagated as needed.
 - Build against `androidx.appcompat:appcompat` to `1.6.1`.
+- Use new `maven-publish` plugin.
 
 ## Version 2.0.3 *(2019-06-07)*
 - Update the LayoutInflater to be compatible with Android Q

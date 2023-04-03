@@ -1,24 +1,32 @@
 plugins {
-  alias(libs.plugins.kotlin.jvm) apply false
-  alias(libs.plugins.kotlin.android) apply false
-  alias(libs.plugins.agp.application) apply false
-  alias(libs.plugins.agp.library) apply false
-  alias(libs.plugins.dokka) apply false
-  alias(libs.plugins.mavenPublish) apply false
+    alias(libs.plugins.kotlin.jvm) apply false
+    alias(libs.plugins.kotlin.android) apply false
+    alias(libs.plugins.agp.application) apply false
+    alias(libs.plugins.agp.library) apply false
+    alias(libs.plugins.dokka) apply false
 }
 
 allprojects {
-  pluginManager.withPlugin("java") {
-    java {
-      toolchain {
-        languageVersion.set(
-            JavaLanguageVersion.of(libs.versions.jdk.get().removeSuffix("-ea").toInt())
-        )
-      }
+    version = project.findProperty("version")
+    group = "io.github.inflationx"
+
+    pluginManager.withPlugin("java") {
+        java {
+            toolchain {
+                languageVersion.set(
+                        JavaLanguageVersion.of(libs.versions.jdk.get().removeSuffix("-ea").toInt())
+                )
+            }
+        }
+
+        tasks.withType(JavaCompile).configureEach {
+            options.release.set(8)
+        }
     }
 
-    tasks.withType(JavaCompile) {
-      options.release = 8
+    pluginManager.withPlugin("org.gradle.maven-publish") {
+        tasks.register("publishRelease") {
+            it.dependsOn("publishReleasePublicationToSonatypeRepository")
+        }
     }
-  }
 }
