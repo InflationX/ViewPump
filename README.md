@@ -85,12 +85,26 @@ _You're good to go!_
 
 To see more ideas for potential use cases, check out the [Recipes](https://github.com/InflationX/ViewPump/wiki/Recipes) wiki page.
 
-# Collaborators
+## Testing
+
+If you need to test views in isolation (i.e. not under the indirect umbrella of an `Activity`), you need to set `factory2` manually in order for `ViewPump` to work.
+
+```kotlin
+val context = ViewPumpContextWrapper.wrap(textContext, viewPump)
+LayoutInflater.from(context).factory2 = FakeFactory2() // Can be a stub that just returns null
+
+// Now inflate your view
+val view = LayoutInflater.from(context).inflate(R.layout.view, null)
+```
+
+Otherwise, no `factory2` instance will be set in the underlying `LayoutInflater` and subsequently `ViewPump` will never be called during inflation.
+
+## Collaborators
 
 - [@jbarr21](https://github.com/jbarr21)
 - [@chrisjenx](https://github.com/chrisjenx)
 
-# Licence
+## Licence
 
     Copyright 2017 InflationX
 
