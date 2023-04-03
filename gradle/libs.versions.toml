@@ -4,7 +4,6 @@ dokka = "1.8.10"
 jdk = "19"
 kotlin = "1.8.10"
 leakcanary = "2.10"
-mavenPublish = "0.25.1"
 
 [plugins]
 agp-application = { id = "com.android.application", version.ref = "agp" }
@@ -12,13 +11,13 @@ agp-library = { id = "com.android.library", version.ref = "agp" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
-mavenPublish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublish" }
 
 [libraries]
-androidx-annotation="androidx.annotation:annotation:1.6.0"
-androidx-appcompat="androidx.appcompat:appcompat:1.6.1"
-androidx-test-runner="androidx.test:runner:1.5.2"
-assertj="org.assertj:assertj-core:3.24.2"
-junit="junit:junit:4.13.2"
+androidx-annotation = "androidx.annotation:annotation:1.6.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
+androidx-test-runner = "androidx.test:runner:1.5.2"
+assertj = "org.assertj:assertj-core:3.24.2"
+junit = "junit:junit:4.13.2"
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanary" }
-mockito="org.mockito:mockito-core:4.11.0"
+mockito = "org.mockito:mockito-core:4.11.0"
+dokka-android = { module = "org.jetbrains.dokka:android-documentation-plugin", version.ref = "dokka" }
