@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         // This is the new way
         // super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase, pump));
-        // This is depreciate, create your own instance of ViewPump.
+        // This is depreciated, create your own instance of ViewPump.
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
 }
