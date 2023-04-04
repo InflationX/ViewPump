@@ -10,6 +10,6 @@ Releasing
  8. `git push --tags`
  10. Update the `gradle.properties` to the next SNAPSHOT version.
  11. `git commit -am "Prepare next development version"`
- 12. `git push && git push --tags`
+ 12. `git push -u origin release/X.Y.0`
  13. Visit [Sonatype Nexus](https://oss.sonatype.org/) and promote the artifact.
  14. Merge `release/X.Y.0` Pull-Request
