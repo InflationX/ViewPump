@@ -44,7 +44,7 @@ class ViewPump private constructor(
    * @param clazz The class of View to be created.
    * @return The processed view, which might not necessarily be the same type as clazz.
    */
-  fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
+  fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet?): View? {
     return inflate(InflateRequest(
         context = context,
         name = clazz.name,
@@ -204,7 +204,7 @@ class ViewPump private constructor(
     @Deprecated("Global singletons are bad for testing, scoping, and composition. Use local ViewPump instances instead.")
     @JvmName("staticCreateDeprecated")
     @JvmStatic
-    fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet): View? {
+    fun create(context: Context, clazz: Class<out View>, attrs: AttributeSet?): View? {
       @Suppress("DEPRECATION_ERROR")
       return get()
         .inflate(InflateRequest(

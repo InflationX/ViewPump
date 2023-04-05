@@ -40,7 +40,6 @@ internal class `-ViewPumpLayoutInflater`(
         setUpLayoutFactories(cloned)
     }
 
-
     /**
      * We use this for internal cloning to be a little more efficient with memory.
      */
@@ -147,7 +146,7 @@ internal class `-ViewPumpLayoutInflater`(
         view: View,
         name: String,
         context: Context,
-        attrs: AttributeSet
+        attrs: AttributeSet?
     ): View? {
         return viewPump
             .inflate(
@@ -169,7 +168,7 @@ internal class `-ViewPumpLayoutInflater`(
      * BUT only for none CustomViews.
      */
     @Throws(ClassNotFoundException::class)
-    override fun onCreateView(parent: View?, name: String, attrs: AttributeSet): View? {
+    override fun onCreateView(parent: View?, name: String, attrs: AttributeSet?): View? {
         return viewPump
             .inflate(
                 InflateRequest(
@@ -189,7 +188,7 @@ internal class `-ViewPumpLayoutInflater`(
      * Basically if this method doesn't inflate the View nothing probably will.
      */
     @Throws(ClassNotFoundException::class)
-    override fun onCreateView(name: String, attrs: AttributeSet): View? {
+    override fun onCreateView(name: String, attrs: AttributeSet?): View? {
         return viewPump
             .inflate(
                 InflateRequest(
@@ -284,7 +283,7 @@ internal class `-ViewPumpLayoutInflater`(
             parent: View?,
             name: String,
             context: Context,
-            attrs: AttributeSet
+            attrs: AttributeSet?
         ): View? {
             return inflater.createCustomViewInternal(view, name, context, attrs)
         }
@@ -296,7 +295,7 @@ internal class `-ViewPumpLayoutInflater`(
 
         override fun onCreateView(
             parent: View?, name: String, context: Context,
-            attrs: AttributeSet
+            attrs: AttributeSet?
         ): View? {
             return inflater.superOnCreateView(parent, name, attrs)
         }
@@ -310,7 +309,7 @@ internal class `-ViewPumpLayoutInflater`(
             parent: View?,
             name: String,
             context: Context,
-            attrs: AttributeSet
+            attrs: AttributeSet?
         ): View? {
             // This mimics the {@code PhoneLayoutInflater} in the way it tries to inflate the base
             // classes, if this fails its pretty certain the app will fail at this point.
@@ -367,9 +366,9 @@ internal class `-ViewPumpLayoutInflater`(
             parent: View?,
             name: String,
             context: Context,
-            attrs: AttributeSet
+            attrs: AttributeSet?
         ): View? {
-            return factory.onCreateView(name, context, attrs)
+            return attrs?.let { factory.onCreateView(name, context, it) }
         }
     }
 
@@ -414,9 +413,9 @@ internal class `-ViewPumpLayoutInflater`(
             parent: View?,
             name: String,
             context: Context,
-            attrs: AttributeSet
+            attrs: AttributeSet?
         ): View? {
-            return factory2.onCreateView(parent, name, context, attrs)
+            return attrs?.let { factory2.onCreateView(parent, name, context, it) }
         }
     }
 
@@ -460,10 +459,10 @@ internal class `-ViewPumpLayoutInflater`(
             parent: View?,
             name: String,
             context: Context,
-            attrs: AttributeSet
+            attrs: AttributeSet?
         ): View? {
             return inflater.createCustomViewInternal(
-                factory2.onCreateView(parent, name, context, attrs), name, context, attrs
+                factory2.onCreateView(parent, name, context, checkNotNull(attrs) { "Should never happen!" }), name, context, attrs
             )
         }
     }
