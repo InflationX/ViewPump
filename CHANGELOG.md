@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.1.1 *(2023-04-05)*
+- Fix nullability issues - @ZacSweers
+
 ## Version 2.1.0 *(2023-03-30)*
 - Deprecate static `init`, `get`, and related APIs in favor of instance-based use. Instead, install local `ViewPump` instances as needed via `ViewPumpContextWrapper.wrap(context, viewPump)`.
 - Optimize internal `cloneInContext()` calls.
